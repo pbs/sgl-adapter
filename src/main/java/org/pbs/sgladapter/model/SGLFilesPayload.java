@@ -1,5 +1,7 @@
 package org.pbs.sgladapter.model;
 
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Schema(
         type = "object",
-        title = "FileRestoreTaskDetails"
+        title = "Files"
 )
-public class FileRestoreTaskDetails {
+public class SGLFilesPayload {
+
+    private String guid;
     private String path;
     private String filename;
-    private String resourceId;
-    private String locatorInfo;
-    private boolean deleteSource;
 }
