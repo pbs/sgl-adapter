@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +24,10 @@ public class FileRestoreTaskDetails {
     @NotBlank(message = "path must not be empty")
     private String path;
 
-    @NotBlank(message = "filename must not be empty")
+    @Pattern(
+            regexp = "^[a-zA-Z0-9._ -]+\\.(mxf|mov)$",
+            message = "filename must be valid"
+    )
     private String filename;
 
     @NotBlank(message = "resourceId must not be empty")
