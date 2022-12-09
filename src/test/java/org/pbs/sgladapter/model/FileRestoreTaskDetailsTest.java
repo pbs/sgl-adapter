@@ -59,26 +59,12 @@ public class FileRestoreTaskDetailsTest {
      * Tests that providing an empty filename and results in a validation error.
      */
     @Test
-    public void testInvalidEmptyFilename() {
+    public void tesValidEmptyFilename() {
         String invalidFilename = "";
         FileRestoreTaskDetails taskDetails = buildBaseFileRestoreTaskDetailsBuilder().filename(invalidFilename).build();
 
         Set<ConstraintViolation<FileRestoreTaskDetails>> violations = validator.validate(taskDetails);
-        assertThat(violations).hasSize(1);
-        violations.stream().forEach(x -> logger.info(x.getMessage()));
-    }
-
-    /**
-     * Tests that providing an empty filename and results in a validation error.
-     */
-    @Test
-    public void testInvalidNonEmptyFilename() {
-        String invalidFilename = "P123123";
-        FileRestoreTaskDetails taskDetails = buildBaseFileRestoreTaskDetailsBuilder().filename(invalidFilename).build();
-
-        Set<ConstraintViolation<FileRestoreTaskDetails>> violations = validator.validate(taskDetails);
-        assertThat(violations).hasSize(1);
-        violations.stream().forEach(x -> logger.info(x.getMessage()));
+        assertThat(violations).hasSize(0);
     }
 
     /**

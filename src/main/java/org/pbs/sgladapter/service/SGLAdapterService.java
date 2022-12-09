@@ -28,6 +28,7 @@ public class SGLAdapterService implements ISGLAdapterService {
                     .filename(((FileRestoreTask) task).getTaskDetails().getFilename())
                     .guid(((FileRestoreTask) task).getTaskDetails().getResourceId())
                     .build();
+
             SGLPayload sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
                     .displayName(((FileRestoreTask) task).getTaskDetails().getResourceId())

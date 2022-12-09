@@ -24,10 +24,8 @@ public class FileRestoreTaskDetails {
     @NotBlank(message = "path must not be empty")
     private String path;
 
-    @Pattern(
-            regexp = "^[a-zA-Z0-9._ -]+\\.(mxf|mov)$",
-            message = "filename must be valid"
-    )
+    // filename can be empty if it needs to restore 3 files for MOV
+    // we shouldn't make it required
     private String filename;
 
     @NotBlank(message = "resourceId must not be empty")
