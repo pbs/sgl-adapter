@@ -1,9 +1,6 @@
 package org.pbs.sgladapter.service;
 
-import org.pbs.sgladapter.model.FileRestoreTask;
-import org.pbs.sgladapter.model.SGLFilesPayload;
-import org.pbs.sgladapter.model.SGLPayload;
-import org.pbs.sgladapter.model.Task;
+import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,14 +28,14 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             RestTemplate restTemplate = new RestTemplate();
             SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
-                    .path(((FileRestoreTask) task).getTaskDetails().getPath())
-                    .filename(((FileRestoreTask) task).getTaskDetails().getFilename())
-                    .guid(((FileRestoreTask) task).getTaskDetails().getResourceId())
+                    .path(((FileRestoreTaskRequest) task).getTaskDetails().getPath())
+                    .filename(((FileRestoreTaskRequest) task).getTaskDetails().getFilename())
+                    .guid(((FileRestoreTaskRequest) task).getTaskDetails().getResourceId())
                     .build();
 
             SGLPayload sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
-                    .displayName(((FileRestoreTask) task).getTaskDetails().getResourceId())
+                    .displayName(((FileRestoreTaskRequest) task).getTaskDetails().getResourceId())
                     .priority(task.getPriority())
                     .files(sglFilesPayload)
                     .build();
@@ -62,9 +59,12 @@ public class SGLAdapterService implements ISGLAdapterService {
         Task task = null;
 
         if (FILE_RESTORE.getType().equalsIgnoreCase(taskType)) {
-            task = new FileRestoreTask();
+            task = new FileRestoreTaskResponse();
 
             // need to call SGL status ws
+            String url = sglUrl + "/flashnet/api/v1/files/";
+
+            RestTemplate restTemplate = new RestTemplate();
 
 
         } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(taskType)) {

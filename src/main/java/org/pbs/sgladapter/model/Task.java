@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
         include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 
-        @JsonSubTypes.Type(value = FileRestoreTask.class, name = "FileRestore")
+        @JsonSubTypes.Type(value = FileRestoreTaskRequest.class, name = "FileRestore")
         //,
         //@JsonSubTypes.Type(value = FileArchiveTask.class, name = "FileArchive")
 })

@@ -13,11 +13,11 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-public class FileRestoreTaskDetailsRequestTest {
-    private static final Logger logger = LoggerFactory.getLogger(FileRestoreTaskDetailsRequestTest.class);
+public class FileRestoreTaskRequestDetailsRequestTest {
+    private static final Logger logger = LoggerFactory.getLogger(FileRestoreTaskRequestDetailsRequestTest.class);
     private static Validator validator;
 
-    private static FileRestoreTaskDetailsRequest.FileRestoreTaskDetailsBuilder buildBaseFileRestoreTaskDetailsBuilder() {
+    private static FileRestoreTaskDetailsRequest.FileRestoreTaskDetailsRequestBuilder buildBaseFileRestoreTaskDetailsBuilder() {
         return FileRestoreTaskDetailsRequest.builder()
                 .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
                 .resourceId("P123123-001")
