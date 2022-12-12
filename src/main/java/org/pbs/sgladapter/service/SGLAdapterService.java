@@ -55,7 +55,7 @@ public class SGLAdapterService implements ISGLAdapterService {
     }
 
     @Override
-    public Task getJobStatus(String taskId) {
+    public Task getJobStatus(String taskType, String taskId) {
         Task task = new FileRestoreTask();
 
         // need to call SGL status ws

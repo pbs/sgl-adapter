@@ -54,7 +54,7 @@ public class SGLAdapterController {
         return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
-    @GetMapping("/task/{taskId}")
+    @GetMapping("/task/{taskType}/{taskId}")
     /*@Operation(summary = "Get a SGL JobStatus for a given taskId",
             description = "Provides capability to get a SGL job status for a given taskId")
     @ApiResponses(value = {
@@ -65,9 +65,10 @@ public class SGLAdapterController {
                     content = {@Content(examples = {@ExampleObject(value = "")})})})
 
      */
-    public ResponseEntity<Task> getJobStatusForTaskId(@PathVariable String taskId) {
-        logger.info("Getting job status for taskId:" + taskId);
-        Task task = sglAdapterService.getJobStatus(taskId);
+    public ResponseEntity<Task> getJobStatusForTaskId(@PathVariable String taskType,
+                                                      @PathVariable String taskId) {
+        logger.info("Getting job status for taskId:" + taskType + " - " + taskId);
+        Task task = sglAdapterService.getJobStatus(taskType, taskId);
         logger.info("Got task:" + task);
         return new ResponseEntity<>(task, HttpStatus.OK);
 

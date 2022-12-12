@@ -6,5 +6,5 @@ public interface ISGLAdapterService {
 
     public Task createTask(Task task);
 
-    public Task getJobStatus(String taskId);
+    public Task getJobStatus(String tasktype, String taskId);
 }
