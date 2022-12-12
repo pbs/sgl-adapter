@@ -6,6 +6,7 @@ import org.pbs.sgladapter.model.SGLPayload;
 import org.pbs.sgladapter.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,12 +15,15 @@ import org.springframework.web.client.RestTemplate;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
+    @Value("${rest.sgl.flashnet.url}")
+    private String sglUrl;
+
     @Override
     public Task createTask(Task task) {
         logger.info("Got task");
         // need to check the type and call the SGL Flashnet WS accordingly
         if (task.getType().equals("FileRestore")) {
-            String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000/flashnet/api/v1/files/";
+            String url = sglUrl+"/flashnet/api/v1/files/";
 
 
             RestTemplate restTemplate = new RestTemplate();

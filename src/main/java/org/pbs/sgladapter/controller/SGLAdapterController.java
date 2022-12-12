@@ -38,7 +38,7 @@ public class SGLAdapterController {
     @PostMapping("/task")
     //@Operation(summary = "Create task",
     //        description = "Provides capability to submit tasks for submission and monitoring")
-    /*@ApiResponses(value = {
+/*    @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "${api.response-codes.created.desc}"),
             @ApiResponse(responseCode = "400",
@@ -46,9 +46,8 @@ public class SGLAdapterController {
                     content = {@Content(examples = {@ExampleObject(value = "")})}),
             @ApiResponse(responseCode = "422",
                     description = "${api.response-codes.unprocessableEntity.desc}",
-                    content = {@Content(examples = {@ExampleObject(value = "")})})})
+                    content = {@Content(examples = {@ExampleObject(value = "")})})})*/
 
-     */
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
         logger.info("Task received {}", task);
         sglAdapterService.createTask(task);
