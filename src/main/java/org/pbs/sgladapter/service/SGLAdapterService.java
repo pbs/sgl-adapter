@@ -11,6 +11,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
+import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
+
 @Service
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
@@ -22,8 +25,8 @@ public class SGLAdapterService implements ISGLAdapterService {
     public Task createTask(Task task) {
         logger.info("Got task");
         // need to check the type and call the SGL Flashnet WS accordingly
-        if (task.getType().equals("FileRestore")) {
-            String url = sglUrl+"/flashnet/api/v1/files/";
+        if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
+            String url = sglUrl + "/flashnet/api/v1/files/";
 
 
             RestTemplate restTemplate = new RestTemplate();
@@ -56,16 +59,19 @@ public class SGLAdapterService implements ISGLAdapterService {
 
     @Override
     public Task getJobStatus(String taskType, String taskId) {
-        Task task = new FileRestoreTask();
+        Task task = null;
 
-        // need to call SGL status ws
-        // currently there's no way to know if the job is FileRestore vs FileArchive
-        // I think when we send "caller" in the createTask, it needs to append type
-        // and here, we'll know which task object to create.
-        // Or ... we can create a generic SGLTask object??
+        if (FILE_RESTORE.getType().equalsIgnoreCase(taskType)) {
+            task = new FileRestoreTask();
+
+            // need to call SGL status ws
+
+
+        } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(taskType)) {
+            // handle file archive
+        }
 
         return task;
-        //return task;
     }
 }
 
