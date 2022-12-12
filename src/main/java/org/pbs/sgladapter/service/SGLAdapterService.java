@@ -32,6 +32,7 @@ public class SGLAdapterService implements ISGLAdapterService {
                     .filename(((FileRestoreTask) task).getTaskDetails().getFilename())
                     .guid(((FileRestoreTask) task).getTaskDetails().getResourceId())
                     .build();
+
             SGLPayload sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
                     .displayName(((FileRestoreTask) task).getTaskDetails().getResourceId())
@@ -46,7 +47,7 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             //ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
-            ResponseEntity responseEntity = restTemplate.postForEntity(url, entity, SGLPayload.class);
+            ResponseEntity responseEntity = restTemplate.postForEntity(url, entity, String.class);
             System.out.println(responseEntity.toString());
 
         }

@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
         @JsonSubTypes.Type(value = FileRestoreTask.class, name = "FileRestore")
         //,
-       // @JsonSubTypes.Type(value = FileArchiveTask.class, name = "FileArchive")
+        //@JsonSubTypes.Type(value = FileArchiveTask.class, name = "FileArchive")
 })
 public abstract class Task {
     private static final Logger logger = LoggerFactory.getLogger(Task.class);
