@@ -21,15 +21,16 @@ import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
-/*    @Value("${rest.sgl.flashnet.url}")
-    private String sglUrl;*/
+    @Value("${rest.sgl.flashnet.url}")
+    private String sglUrl;
 
     @Override
     public Task createTask(Task task) throws JsonProcessingException {
         logger.info("Got task");
         // need to check the type and call the SGL Flashnet WS accordingly
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
-            String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v1/files/";
+            //String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v1/files/";
+            String url = sglUrl + "/flashnet/api/v1/files/";
 
 
             RestTemplate restTemplate = new RestTemplate();
@@ -61,20 +62,16 @@ public class SGLAdapterService implements ISGLAdapterService {
                     " ]\n" +
                     "}";*/
 
-            System.out.println("payload is :");
-            System.out.println(om.writeValueAsString(sglPayload));
+            //System.out.println("payload is :");
+            //System.out.println(om.writeValueAsString(sglPayload));
             HttpHeaders headers = new HttpHeaders();
             MediaType mediaType = MediaType.parseMediaType("text/plain");
             headers.setContentType(mediaType);
 
-            //HttpEntity<String> entity = new HttpEntity("{"+sglPayload+"}", headers);
             HttpEntity<String> entity = new HttpEntity(om.writeValueAsString(sglPayload), headers);
 
-            //ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
             String responseEntity = restTemplate.postForObject(url, entity, String.class);
-            //String responseEntity = restTemplate.postForObject(url, entity, String.class);
-            System.out.println(responseEntity);
+            //System.out.println(responseEntity);
 
             ObjectMapper mapper = new JsonMapper();
             JsonNode json = mapper.readTree(responseEntity);
@@ -94,7 +91,7 @@ public class SGLAdapterService implements ISGLAdapterService {
             task = new FileRestoreTaskResponse();
 
             // need to call SGL status ws
-            String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v2/jobs/" + taskId;
+            String url = sglUrl + "/flashnet/api/v2/jobs/" + taskId;
 
             RestTemplate restTemplate = new RestTemplate();
 
