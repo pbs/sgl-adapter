@@ -1,8 +1,7 @@
-package org.pbs.sgladapter.model;
+package org.pbs.sgladapter.model.sgl;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

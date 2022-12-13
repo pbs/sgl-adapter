@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.pbs.sgladapter.model.*;
+import org.pbs.sgladapter.model.sgl.Job;
+import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
+import org.pbs.sgladapter.model.sgl.SGLPayload;
+import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +25,7 @@ import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
-
+    @Value("${rest.sgl.flashnet.url}")
     private String sglUrl;
 
     @Override

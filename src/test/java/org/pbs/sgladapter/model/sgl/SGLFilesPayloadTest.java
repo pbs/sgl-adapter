@@ -1,4 +1,4 @@
-package org.pbs.sgladapter.model;
+package org.pbs.sgladapter.model.sgl;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

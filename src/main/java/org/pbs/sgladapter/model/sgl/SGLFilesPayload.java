@@ -1,4 +1,4 @@
-package org.pbs.sgladapter.model;
+package org.pbs.sgladapter.model.sgl;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

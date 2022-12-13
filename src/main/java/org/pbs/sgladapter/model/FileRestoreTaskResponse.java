@@ -2,6 +2,7 @@ package org.pbs.sgladapter.model;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
 
 @NoArgsConstructor
 @AllArgsConstructor
