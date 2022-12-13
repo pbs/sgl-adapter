@@ -105,7 +105,20 @@ public class SGLAdapterService implements ISGLAdapterService {
             ObjectMapper om = new ObjectMapper();
             try {
                 SGLStatusResponse sglStatusResponse = om.readValue(response.getBody(), SGLStatusResponse.class);
+                Job job = sglStatusResponse.getJob();
+                TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
 
+                if (job.getExitStateMessage().equalsIgnoreCase("LIVE") &&
+                        job.getQueuedStateMessage().equalsIgnoreCase("Running")) {
+                    taskStatus = TaskStatus.IN_PROGRESS;
+                } else if (job.getExitStateMessage().equalsIgnoreCase("PASSED") &&
+                        job.getQueuedStateMessage().equalsIgnoreCase("Finished")) {
+                    taskStatus = TaskStatus.COMPLETED_SUCCESS;
+                } else {
+                    taskStatus = TaskStatus.COMPLETED_FAILED;
+                }
+
+                task.setStatus(taskStatus);
 
                 ((FileRestoreTaskResponse) task).setTaskDetails(sglStatusResponse);
             } catch (JsonProcessingException e) {

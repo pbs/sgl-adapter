@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Job {
     @JsonProperty("RID")
-    private int rID;
+    private String rID;
     @JsonProperty("RunState")
     private int runState;
     @JsonProperty("ExitState")
