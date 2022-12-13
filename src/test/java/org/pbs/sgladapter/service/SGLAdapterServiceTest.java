@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.model.FileRestoreTaskDetailsRequest;
 import org.pbs.sgladapter.model.FileRestoreTaskRequest;
-import org.pbs.sgladapter.model.SGLFilesPayloadTest;
 import org.pbs.sgladapter.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
