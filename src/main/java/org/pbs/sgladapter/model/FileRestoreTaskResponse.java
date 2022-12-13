@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class FileRestoreTaskResponse extends Task {
-    private FileRestoreTaskDetailsResponse taskDetails;
+    private SGLStatusResponse taskDetails;
 
 }

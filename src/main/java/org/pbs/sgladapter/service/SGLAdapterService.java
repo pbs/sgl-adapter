@@ -90,14 +90,26 @@ public class SGLAdapterService implements ISGLAdapterService {
         if (FILE_RESTORE.getType().equalsIgnoreCase(taskType)) {
             task = new FileRestoreTaskResponse();
 
+            task.setType(taskType);
+            task.setTaskId(taskId);
+
             // need to call SGL status ws
             String url = sglUrl + "/flashnet/api/v2/jobs/" + taskId;
 
             RestTemplate restTemplate = new RestTemplate();
 
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-            System.out.println(response.toString());
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            System.out.println(response.getBody());
+
+            ObjectMapper om = new ObjectMapper();
+            try {
+                SGLStatusResponse sglStatusResponse = om.readValue(response.getBody(), SGLStatusResponse.class);
+
+                ((FileRestoreTaskResponse) task).setTaskDetails(sglStatusResponse);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
 
         } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(taskType)) {
             // handle file archive
