@@ -1,5 +1,6 @@
 package org.pbs.sgladapter.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -48,7 +49,7 @@ public class SGLAdapterController {
                     description = "${api.response-codes.unprocessableEntity.desc}",
                     content = {@Content(examples = {@ExampleObject(value = "")})})})*/
 
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@RequestBody Task task) throws JsonProcessingException {
         logger.info("Task received {}", task);
         sglAdapterService.createTask(task);
         return new ResponseEntity<>(task, HttpStatus.CREATED);

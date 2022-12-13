@@ -1,10 +1,7 @@
 package org.pbs.sgladapter.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +10,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
@@ -33,6 +32,6 @@ public class SGLPayload {
     private Integer priority;
 
     @NotNull(message = "files must not be null")
-    private SGLFilesPayload files;
+    private List<SGLFilesPayload> files;
 
 }

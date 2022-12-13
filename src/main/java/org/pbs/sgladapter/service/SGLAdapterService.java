@@ -1,5 +1,7 @@
 package org.pbs.sgladapter.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
 import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
@@ -15,15 +19,15 @@ import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
-    @Value("${rest.sgl.flashnet.url}")
-    private String sglUrl;
+/*    @Value("${rest.sgl.flashnet.url}")
+    private String sglUrl;*/
 
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(Task task) throws JsonProcessingException {
         logger.info("Got task");
         // need to check the type and call the SGL Flashnet WS accordingly
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
-            String url = sglUrl + "/flashnet/api/v1/files/";
+            String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v1/files/";
 
 
             RestTemplate restTemplate = new RestTemplate();
@@ -37,18 +41,38 @@ public class SGLAdapterService implements ISGLAdapterService {
                     .caller(task.getCorrelationId())
                     .displayName(((FileRestoreTaskRequest) task).getTaskDetails().getResourceId())
                     .priority(task.getPriority())
-                    .files(sglFilesPayload)
+                    .files(List.of(sglFilesPayload))
                     .build();
 
-            HttpHeaders headers = new HttpHeaders();
-            //headers.setContentType();
+            ObjectMapper om = new ObjectMapper();
 
-            HttpEntity<SGLPayload> entity = new HttpEntity(sglPayload, headers);
+/*            String payload = "{\n" +
+                    " \"Caller\":\"Postman Test (adhoc) - bpmuatpu\",\n" +
+                    " \"DisplayName\":\"P222222-555\",\n" +
+                    " \"Priority\":60,\n" +
+                    " \"Files\":[\n" +
+                    " {\n" +
+                    " \"Guid\":\"P222222-555\",\n" +
+                    " \"Path\":\"\\\\\\\\m-isilonsmb\\\\gpop_dev\\\\mxf\",\n" +
+                    " \"Filename\":\"P222222-555.mxf\"\n" +
+                    " }\n" +
+                    " ]\n" +
+                    "}";*/
+
+            System.out.println("payload is :");
+            System.out.println(om.writeValueAsString(sglPayload));
+            HttpHeaders headers = new HttpHeaders();
+            MediaType mediaType = MediaType.parseMediaType("text/plain");
+            headers.setContentType(mediaType);
+
+            //HttpEntity<String> entity = new HttpEntity("{"+sglPayload+"}", headers);
+            HttpEntity<String> entity = new HttpEntity(om.writeValueAsString(sglPayload), headers);
 
             //ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
-            ResponseEntity responseEntity = restTemplate.postForEntity(url, entity, String.class);
-            System.out.println(responseEntity.toString());
+            String responseEntity = restTemplate.postForObject(url, entity, String.class);
+            //String responseEntity = restTemplate.postForObject(url, entity, String.class);
+            System.out.println(responseEntity);
 
         }
         return task;
@@ -62,7 +86,7 @@ public class SGLAdapterService implements ISGLAdapterService {
             task = new FileRestoreTaskResponse();
 
             // need to call SGL status ws
-            String url = sglUrl + "/flashnet/api/v2/jobs/" + taskId;
+            String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v2/jobs/" + taskId;
 
             RestTemplate restTemplate = new RestTemplate();
 
