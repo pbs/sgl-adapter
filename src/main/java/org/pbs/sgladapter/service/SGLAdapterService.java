@@ -1,7 +1,9 @@
 package org.pbs.sgladapter.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,12 @@ public class SGLAdapterService implements ISGLAdapterService {
             String responseEntity = restTemplate.postForObject(url, entity, String.class);
             //String responseEntity = restTemplate.postForObject(url, entity, String.class);
             System.out.println(responseEntity);
+
+            ObjectMapper mapper = new JsonMapper();
+            JsonNode json = mapper.readTree(responseEntity);
+
+            String taskId = json.get("RID").asText();
+            task.setTaskId(taskId);
 
         }
         return task;
