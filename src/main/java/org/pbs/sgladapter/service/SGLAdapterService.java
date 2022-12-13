@@ -21,7 +21,7 @@ import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
-    @Value("${rest.sgl.flashnet.url}")
+
     private String sglUrl;
 
     @Override
@@ -49,21 +49,6 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             ObjectMapper om = new ObjectMapper();
 
-/*            String payload = "{\n" +
-                    " \"Caller\":\"Postman Test (adhoc) - bpmuatpu\",\n" +
-                    " \"DisplayName\":\"P222222-555\",\n" +
-                    " \"Priority\":60,\n" +
-                    " \"Files\":[\n" +
-                    " {\n" +
-                    " \"Guid\":\"P222222-555\",\n" +
-                    " \"Path\":\"\\\\\\\\m-isilonsmb\\\\gpop_dev\\\\mxf\",\n" +
-                    " \"Filename\":\"P222222-555.mxf\"\n" +
-                    " }\n" +
-                    " ]\n" +
-                    "}";*/
-
-            //System.out.println("payload is :");
-            //System.out.println(om.writeValueAsString(sglPayload));
             HttpHeaders headers = new HttpHeaders();
             MediaType mediaType = MediaType.parseMediaType("text/plain");
             headers.setContentType(mediaType);
@@ -94,6 +79,7 @@ public class SGLAdapterService implements ISGLAdapterService {
             task.setTaskId(taskId);
 
             // need to call SGL status ws
+            //String url = "" + "/flashnet/api/v2/jobs/" + taskId;
             String url = sglUrl + "/flashnet/api/v2/jobs/" + taskId;
 
             RestTemplate restTemplate = new RestTemplate();
