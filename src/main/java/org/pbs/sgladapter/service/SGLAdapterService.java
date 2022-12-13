@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.pbs.sgladapter.config.AppConfig;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
@@ -11,6 +12,7 @@ import org.pbs.sgladapter.model.sgl.SGLPayload;
 import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -25,13 +27,17 @@ import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 public class SGLAdapterService implements ISGLAdapterService {
     private Logger logger = LoggerFactory.getLogger(SGLAdapterService.class);
 
-    @Value("${rest.sgl.flashnet.url}")
-    private String sglUrl;
+    @Autowired
+    private AppConfig appConfig;
+
+    //@Value("${rest.sgl.flashnet.url}")
+    //private String sglUrl;
 
     @Override
     public Task createTask(Task task) throws JsonProcessingException {
         logger.info("Got task");
         // need to check the type and call the SGL Flashnet WS accordingly
+        String sglUrl = appConfig.getSglUrl();
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
             //String url = "http://m-mtsc0ap-lab.hq.corp.pbs.org:11000" + "/flashnet/api/v1/files/";
             String url = sglUrl + "/flashnet/api/v1/files/";
@@ -88,6 +94,7 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             // need to call SGL status ws
             //String url = "" + "/flashnet/api/v2/jobs/" + taskId;
+            String sglUrl = appConfig.getSglUrl();
             String url = sglUrl + "/flashnet/api/v2/jobs/" + taskId;
 
             RestTemplate restTemplate = new RestTemplate();
