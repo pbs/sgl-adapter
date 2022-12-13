@@ -66,6 +66,10 @@ public class SGLAdapterService implements ISGLAdapterService {
             JsonNode json = mapper.readTree(responseEntity);
 
             String taskId = json.get("RID").asText();
+            if (Integer.parseInt(taskId) <= 0) {
+                logger.error("Failed to create a new task for " + task.getType()
+                        + " [" + responseEntity + "]");
+            }
             task.setTaskId(taskId);
 
         }
