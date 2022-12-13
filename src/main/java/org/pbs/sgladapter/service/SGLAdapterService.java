@@ -112,11 +112,11 @@ public class SGLAdapterService implements ISGLAdapterService {
 
                 if (exitStateMssg == null || queuedStateMssg == null) {
                     taskStatus = TaskStatus.COMPLETED_FAILED;
-                } else if (exitStateMssg.equalsIgnoreCase("LIVE") &&
-                        queuedStateMssg.equalsIgnoreCase("Running")) {
+                } else if ("LiVE".equalsIgnoreCase(exitStateMssg) &&
+                        "Running".equalsIgnoreCase(queuedStateMssg)) {
                     taskStatus = TaskStatus.IN_PROGRESS;
-                } else if (exitStateMssg.equalsIgnoreCase("PASSED") &&
-                        queuedStateMssg.equalsIgnoreCase("Finished")) {
+                } else if ("PASSED".equalsIgnoreCase(exitStateMssg) &&
+                        "Finished".equalsIgnoreCase(queuedStateMssg)) {
                     taskStatus = TaskStatus.COMPLETED_SUCCESS;
                 } else {
                     taskStatus = TaskStatus.COMPLETED_FAILED;
