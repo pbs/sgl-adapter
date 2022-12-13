@@ -1,18 +1,20 @@
 package org.pbs.sgladapter.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.ArrayList;
 
+@Data
 public class SGLStatusResponse {
     @JsonProperty("Job")
-    public Job job;
+    private Job job;
     @JsonProperty("Success")
-    public boolean success;
+    private boolean success;
     @JsonProperty("Errors")
-    public ArrayList<Object> errors;
+    private ArrayList<Object> errors;
     @JsonProperty("Message")
-    public String message;
+    private String message;
     @JsonProperty("Lid")
-    public String lid;
+    private String lid;
 }

@@ -106,6 +106,7 @@ public class SGLAdapterService implements ISGLAdapterService {
             try {
                 SGLStatusResponse sglStatusResponse = om.readValue(response.getBody(), SGLStatusResponse.class);
 
+
                 ((FileRestoreTaskResponse) task).setTaskDetails(sglStatusResponse);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);

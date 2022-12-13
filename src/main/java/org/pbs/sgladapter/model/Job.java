@@ -1,52 +1,54 @@
 package org.pbs.sgladapter.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class Job {
     @JsonProperty("RID")
-    public int rID;
+    private int rID;
     @JsonProperty("RunState")
-    public int runState;
+    private int runState;
     @JsonProperty("ExitState")
-    public int exitState;
+    private int exitState;
     @JsonProperty("ExitStateMessage")
-    public String exitStateMessage;
+    private String exitStateMessage;
     @JsonProperty("QueuedStateCode")
-    public int queuedStateCode;
+    private int queuedStateCode;
     @JsonProperty("QueuedStateMessage")
-    public String queuedStateMessage;
+    private String queuedStateMessage;
     @JsonProperty("Action")
-    public int action;
+    private int action;
     @JsonProperty("Status")
-    public int status;
+    private int status;
     @JsonProperty("DisplayName")
-    public String displayName;
+    private String displayName;
     @JsonProperty("Priority")
-    public int priority;
+    private int priority;
     @JsonProperty("ExecutingServer")
-    public String executingServer;
+    private String executingServer;
     @JsonProperty("Group")
-    public String group;
+    private String group;
     @JsonProperty("Volume")
-    public String volume;
+    private String volume;
     @JsonProperty("Changer")
-    public String changer;
+    private String changer;
     @JsonProperty("CallingProduct")
-    public String callingProduct;
+    private String callingProduct;
     @JsonProperty("CallingServer")
-    public String callingServer;
+    private String callingServer;
     @JsonProperty("LFK")
-    public int lFK;
+    private int lFK;
     @JsonProperty("QK")
-    public int qK;
+    private int qK;
     @JsonProperty("Size")
-    public int size;
+    private int size;
     @JsonProperty("BytesTransferred")
-    public int bytesTransferred;
+    private int bytesTransferred;
     @JsonProperty("BytesVerified")
-    public int bytesVerified;
+    private int bytesVerified;
     @JsonProperty("WillVerify")
-    public boolean willVerify;
+    private boolean willVerify;
     @JsonProperty("Percent")
-    public int percent;
+    private int percent;
 }
