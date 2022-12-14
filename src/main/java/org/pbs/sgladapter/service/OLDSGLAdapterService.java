@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
-import org.pbs.sgladapter.model.FileRestoreTaskRequest;
-import org.pbs.sgladapter.model.FileRestoreTaskResponse;
+import org.pbs.sgladapter.model.SGLGenericTaskRequest;
+import org.pbs.sgladapter.model.SGLGenericTaskResponse;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
 import org.pbs.sgladapter.model.sgl.SGLPayload;
@@ -49,14 +49,14 @@ public class OLDSGLAdapterService {
 
             RestTemplate restTemplate = new RestTemplate();
             SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
-                    .path(((FileRestoreTaskRequest) task).getTaskDetails().getPath())
-                    .filename(((FileRestoreTaskRequest) task).getTaskDetails().getFilename())
-                    .guid(((FileRestoreTaskRequest) task).getTaskDetails().getResourceId())
+                    .path(((SGLGenericTaskRequest) task).getTaskDetails().getPath())
+                    .filename(((SGLGenericTaskRequest) task).getTaskDetails().getFilename())
+                    .guid(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
                     .build();
 
             SGLPayload sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
-                    .displayName(((FileRestoreTaskRequest) task).getTaskDetails().getResourceId())
+                    .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
                     .priority(task.getPriority())
                     .files(List.of(sglFilesPayload))
                     .build();
@@ -90,7 +90,7 @@ public class OLDSGLAdapterService {
         Task task = null;
 
         if (FILE_RESTORE.getType().equalsIgnoreCase(taskType)) {
-            task = new FileRestoreTaskResponse();
+            task = new SGLGenericTaskResponse();
 
             task.setType(taskType);
             task.setTaskId(taskId);

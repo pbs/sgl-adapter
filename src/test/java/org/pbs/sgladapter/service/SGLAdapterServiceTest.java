@@ -1,23 +1,10 @@
 package org.pbs.sgladapter.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.pbs.sgladapter.model.FileRestoreTaskDetailsRequest;
-import org.pbs.sgladapter.model.FileRestoreTaskRequest;
-import org.pbs.sgladapter.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestTemplate;
 
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 //@RunWith(SpringJUnit4ClassRunner.class)

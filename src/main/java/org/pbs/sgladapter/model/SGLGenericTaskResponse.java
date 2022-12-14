@@ -10,7 +10,7 @@ import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
 @ToString(callSuper = true)
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class FileRestoreTaskResponse extends Task {
+public class SGLGenericTaskResponse extends Task {
     private SGLStatusResponse taskDetails;
 
 }

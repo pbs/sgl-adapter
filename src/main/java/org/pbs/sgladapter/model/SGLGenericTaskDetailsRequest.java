@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
         type = "object",
         title = "FileRestoreTaskDetails"
 )
-public class FileRestoreTaskDetailsRequest {
+public class SGLGenericTaskDetailsRequest {
 
     @NotBlank(message = "path must not be empty")
     private String path;

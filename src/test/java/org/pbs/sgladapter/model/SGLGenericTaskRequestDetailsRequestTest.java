@@ -13,12 +13,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-public class FileRestoreTaskRequestDetailsRequestTest {
-    private static final Logger logger = LoggerFactory.getLogger(FileRestoreTaskRequestDetailsRequestTest.class);
+public class SGLGenericTaskRequestDetailsRequestTest {
+    private static final Logger logger = LoggerFactory.getLogger(SGLGenericTaskRequestDetailsRequestTest.class);
     private static Validator validator;
 
-    private static FileRestoreTaskDetailsRequest.FileRestoreTaskDetailsRequestBuilder buildBaseFileRestoreTaskDetailsBuilder() {
-        return FileRestoreTaskDetailsRequest.builder()
+    private static SGLGenericTaskDetailsRequest.SGLGenericTaskDetailsRequestBuilder buildBaseFileRestoreTaskDetailsBuilder() {
+        return SGLGenericTaskDetailsRequest.builder()
                 .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
                 .resourceId("P123123-001")
                 .filename("P123123-001.mxf");
@@ -35,8 +35,8 @@ public class FileRestoreTaskRequestDetailsRequestTest {
      */
     @Test
     public void testValidFileRestoreTaskDetails() {
-        FileRestoreTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().build();
-        Set<ConstraintViolation<FileRestoreTaskDetailsRequest>> violations = validator.validate(taskDetails);
+        SGLGenericTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().build();
+        Set<ConstraintViolation<SGLGenericTaskDetailsRequest>> violations = validator.validate(taskDetails);
         assertThat(violations).hasSize(0);
     }
 
@@ -46,9 +46,9 @@ public class FileRestoreTaskRequestDetailsRequestTest {
     @Test
     public void testInvalidPath() {
         String invalidPath = "";
-        FileRestoreTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().path(invalidPath).build();
+        SGLGenericTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().path(invalidPath).build();
 
-        Set<ConstraintViolation<FileRestoreTaskDetailsRequest>> violations = validator.validate(taskDetails);
+        Set<ConstraintViolation<SGLGenericTaskDetailsRequest>> violations = validator.validate(taskDetails);
         assertThat(violations).hasSize(1);
         violations.stream().forEach(x -> logger.info(x.getMessage()));
     }
@@ -60,9 +60,9 @@ public class FileRestoreTaskRequestDetailsRequestTest {
     @Test
     public void tesValidEmptyFilename() {
         String invalidFilename = "";
-        FileRestoreTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().filename(invalidFilename).build();
+        SGLGenericTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().filename(invalidFilename).build();
 
-        Set<ConstraintViolation<FileRestoreTaskDetailsRequest>> violations = validator.validate(taskDetails);
+        Set<ConstraintViolation<SGLGenericTaskDetailsRequest>> violations = validator.validate(taskDetails);
         assertThat(violations).hasSize(0);
     }
 
@@ -72,9 +72,9 @@ public class FileRestoreTaskRequestDetailsRequestTest {
     @Test
     public void testInvalidResourceId() {
         String invalidFilename = "";
-        FileRestoreTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().resourceId(invalidFilename).build();
+        SGLGenericTaskDetailsRequest taskDetails = buildBaseFileRestoreTaskDetailsBuilder().resourceId(invalidFilename).build();
 
-        Set<ConstraintViolation<FileRestoreTaskDetailsRequest>> violations = validator.validate(taskDetails);
+        Set<ConstraintViolation<SGLGenericTaskDetailsRequest>> violations = validator.validate(taskDetails);
         assertThat(violations).hasSize(1);
         violations.stream().forEach(x -> logger.info(x.getMessage()));
     }

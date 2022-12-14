@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class FileRestoreTaskRequest extends Task {
-    private FileRestoreTaskDetailsRequest taskDetails;
+public class SGLGenericTaskRequest extends Task {
+    private SGLGenericTaskDetailsRequest taskDetails;
 
 }
