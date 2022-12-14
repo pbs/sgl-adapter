@@ -3,7 +3,6 @@ package org.pbs.sgladapter.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,17 +11,13 @@ import org.pbs.sgladapter.model.FileRestoreTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -31,10 +26,11 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles("test")
 public class SGLAdapterServiceTest {
 
+    /*
     private static final Logger logger = LoggerFactory.getLogger(SGLAdapterServiceTest.class);
 
     @InjectMocks
-    private SGLAdapterService sglAdapterService;
+    private OLDSGLAdapterService sglAdapterService;
 
     @Mock
     private RestTemplate mockRestTemplate;
@@ -62,5 +58,7 @@ public class SGLAdapterServiceTest {
         }
 
     }
+
+     */
 
 }

@@ -29,10 +29,11 @@ public class SGLAdapterController {
         this.sglAdapterService = sglAdapterService;
     }
 
-    @Autowired
-    public void setSglAdapterService(ISGLAdapterService sglAdapterService) {
-        this.sglAdapterService = sglAdapterService;
-    }
+
+//    @Autowired
+//    public void setSglAdapterService(ISGLAdapterService sglAdapterService) {
+//        this.sglAdapterService = sglAdapterService;
+//    }
 
     private static final Logger logger = LoggerFactory.getLogger(SGLAdapterController.class);
 

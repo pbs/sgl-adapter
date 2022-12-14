@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(
         name = "sgl",
-        url = "${rest.sgl.flashnet.url:http://localhost:8080}",
+        url = "${rest.sgl.flashnet.url:'http://m-mtsc0ap-lab.hq.corp.pbs.org:11000'}",
         path = "/flashnet/api"
 )
 public interface SGLAdapterClient extends IAdapterClient {
