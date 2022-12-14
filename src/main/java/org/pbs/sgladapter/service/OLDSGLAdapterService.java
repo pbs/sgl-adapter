@@ -95,7 +95,7 @@ public class OLDSGLAdapterService {
             task.setType(taskType);
             task.setTaskId(taskId);
 
-            SGLStatusResponse response = sglAdapterClient.getTaskStatus(taskId);
+            String response = sglAdapterClient.getTaskStatus(taskId);
 
 
         }
