@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY, property = "type", visible = false)
+        include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 
         @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileRestore")
