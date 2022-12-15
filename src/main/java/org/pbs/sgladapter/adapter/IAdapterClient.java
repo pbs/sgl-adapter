@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface IAdapterClient {
 
   @PostMapping("/v1/files/")
-  public String restore(@RequestBody SGLPayload payload);
+  public String restore(@RequestBody String payload);
 
   @PostMapping("/v2/assets/")
-  public String archive(@RequestBody SGLPayload payload);
+  public String archive(@RequestBody String payload);
 
   @GetMapping("/v2/jobs/{taskId}")
   public String getTaskStatus(@PathVariable String taskId);
