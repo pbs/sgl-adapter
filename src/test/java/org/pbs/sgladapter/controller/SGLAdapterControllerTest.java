@@ -1,43 +1,48 @@
 package org.pbs.sgladapter.controller;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.pbs.sgladapter.model.SGLGenericTaskResponse;
+import org.pbs.sgladapter.model.Task;
+import org.pbs.sgladapter.model.TaskType;
 import org.pbs.sgladapter.service.ISGLAdapterService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@WebMvcTest(SGLAdapterController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(MockitoExtension.class)
 class SGLAdapterControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    SGLAdapterController sglAdapterController;
 
-    @MockBean
-    private ISGLAdapterService sglAdapterService;
-
-    private static final String CREATE_TASK = "/v1/task";
+    @Mock
+    ISGLAdapterService sglAdapterService;
 
     @Test
     void testCreateTask() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post(CREATE_TASK)
-                .contentType(MediaType.TEXT_PLAIN)
-                        .content("{}");
-        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
+        Task task = new SGLGenericTaskResponse();
+        task.setTaskId("123");
+        when(sglAdapterService.createTask(any())).thenReturn(task);
+        ResponseEntity<Task> responseEntity = sglAdapterController.createTask(any());
+        assertEquals("123", ((SGLGenericTaskResponse)responseEntity.getBody()).getTaskId());
+    }
 
-        assertEquals(200, response.getStatus());
-
+    @Test
+    void testGetJobStatusForTaskId() throws Exception {
+        Task task = new SGLGenericTaskResponse();
+        task.setTaskId("123");
+        task.setType(TaskType.FILE_RESTORE.getType());
+        when(sglAdapterService.getJobStatus(any(), any())).thenReturn(task);
+        ResponseEntity<Task> responseEntity = sglAdapterController.getJobStatusForTaskId(any(), any());
+        assertEquals("123", ((SGLGenericTaskResponse)responseEntity.getBody()).getTaskId());
+        assertEquals("FileRestore", ((SGLGenericTaskResponse)responseEntity.getBody()).getType());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
