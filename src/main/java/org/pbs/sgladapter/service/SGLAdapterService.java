@@ -6,9 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
 import org.pbs.sgladapter.model.SGLGenericTaskRequest;
+import org.pbs.sgladapter.model.SGLGenericTaskResponse;
 import org.pbs.sgladapter.model.Task;
+import org.pbs.sgladapter.model.TaskStatus;
+import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
 import org.pbs.sgladapter.model.sgl.SGLPayload;
+import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -108,13 +112,48 @@ public class SGLAdapterService implements ISGLAdapterService {
     }
 
     @Override
-    public Task getJobStatus(String tasktype, String taskId) {
+    public Task getJobStatus(String taskType, String taskId) {
         logger.info("inside of Service.getJobStatus");
 
         String response = sglAdapterClient.getTaskStatus(taskId);
 
         System.out.println(response);
 
-        return null;
+        Task responseTask = new SGLGenericTaskResponse();
+
+        responseTask.setType(taskType);
+        responseTask.setTaskId(taskId);
+
+        try {
+            ObjectMapper om = new ObjectMapper();
+
+            SGLStatusResponse sglStatusResponse = om.readValue(response, SGLStatusResponse.class);
+            Job job = sglStatusResponse.getJob();
+
+            String exitStateMssg = job.getExitStateMessage();
+            String queuedStateMssg = job.getQueuedStateMessage();
+
+            TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
+
+            if (exitStateMssg == null || queuedStateMssg == null) {
+                taskStatus = TaskStatus.COMPLETED_FAILED;
+            } else if ("LiVE".equalsIgnoreCase(exitStateMssg) &&
+                    "Running".equalsIgnoreCase(queuedStateMssg)) {
+                taskStatus = TaskStatus.IN_PROGRESS;
+            } else if ("PASSED".equalsIgnoreCase(exitStateMssg) &&
+                    "Finished".equalsIgnoreCase(queuedStateMssg)) {
+                taskStatus = TaskStatus.COMPLETED_SUCCESS;
+            } else {
+                taskStatus = TaskStatus.COMPLETED_FAILED;
+            }
+
+            responseTask.setStatus(taskStatus);
+
+            ((SGLGenericTaskResponse) responseTask).setTaskDetails(sglStatusResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return responseTask;
     }
 }
