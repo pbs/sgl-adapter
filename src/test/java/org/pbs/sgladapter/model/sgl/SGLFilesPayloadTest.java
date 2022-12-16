@@ -41,20 +41,6 @@ public class SGLFilesPayloadTest {
     }
 
     /**
-     * Tests that providing an empty path and results in a validation error.
-     */
-    @Test
-    public void testInvalidPath() {
-        String invalidPath = "";
-        SGLFilesPayload sglFilesPayload = buildBaseSGLFilePayloadBuilder().path(invalidPath).build();
-
-        Set<ConstraintViolation<SGLFilesPayload>> violations = validator.validate(sglFilesPayload);
-        assertThat(violations).hasSize(1);
-        violations.stream().forEach(x -> logger.info(x.getMessage()));
-    }
-
-
-    /**
      * Tests that providing an empty filename and results in a validation error.
      */
     @Test
