@@ -1,5 +1,7 @@
 package org.pbs.sgladapter.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,4 +33,8 @@ public class SGLGenericTaskDetailsRequest {
     private String locatorInfo;
 
     private Boolean deleteSource;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Hidden
+    private String details;
 }

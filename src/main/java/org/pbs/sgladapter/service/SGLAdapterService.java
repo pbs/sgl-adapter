@@ -73,8 +73,13 @@ public class SGLAdapterService implements ISGLAdapterService {
                     .build();
         } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
             String path = ((SGLGenericTaskRequest) task).getTaskDetails().getPath();
+            if (path != null && !path.isBlank()) {
+                if (!path.trim().endsWith("\\")) {
+                    path = path.trim().concat("\\");
+                }
+            }
             String fileName = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
-            String fullFileName = (path == null) ? "" : path+fileName;
+            String fullFileName = (path == null) ? "" : path + fileName;
             sglFilesPayload.setFullFileName(fullFileName);
 
             sglPayload = SGLPayload.builder()
@@ -116,6 +121,8 @@ public class SGLAdapterService implements ISGLAdapterService {
                         + " [" + response + "]");
             }
             task.setTaskId(taskId);
+            ((SGLGenericTaskRequest) task).getTaskDetails().setDetails(response);
+
         }
 
         return task;
