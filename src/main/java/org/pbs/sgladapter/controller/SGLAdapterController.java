@@ -29,7 +29,7 @@ public class SGLAdapterController {
     public ResponseEntity<Task> createTask(@RequestBody Task task) throws JsonProcessingException {
         logger.info("Task received {}", task);
         Task retTask = sglAdapterService.createTask(task);
-        return new ResponseEntity<>(retTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(retTask, HttpStatus.OK);
     }
 
     @GetMapping("/task/{taskType}/{taskId}")
