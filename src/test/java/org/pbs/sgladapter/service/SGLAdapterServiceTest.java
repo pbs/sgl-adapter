@@ -11,10 +11,8 @@ import org.pbs.sgladapter.model.SGLGenericTaskDetailsRequest;
 import org.pbs.sgladapter.model.SGLGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
-import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
