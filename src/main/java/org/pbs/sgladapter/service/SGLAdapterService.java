@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
 import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
 @Service
@@ -48,7 +49,8 @@ public class SGLAdapterService implements ISGLAdapterService {
             System.out.println(response);
 
 
-        } else {
+        }
+        else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
 
         }
 
