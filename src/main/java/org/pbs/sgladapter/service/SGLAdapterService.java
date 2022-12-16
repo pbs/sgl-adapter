@@ -38,21 +38,16 @@ public class SGLAdapterService implements ISGLAdapterService {
     public Task createTask(Task task) throws JsonProcessingException {
         logger.info("inside of Service.createTask");
         String response = "";
-
+        String request = prepareCreateTaskRequest(task);
+        logger.info("Type is : {}", task.getType());
+        logger.info("Request is : {}", request);
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
-
-            String request = prepareCreateTaskRequest(task);
-            System.out.println("Request = " + request);
-
             response = sglAdapterClient.restore(request);
-
-            System.out.println(response);
-
-
         }
         else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
-
+            response = sglAdapterClient.archive(request);
         }
+        logger.info(response);
 
         task = prepareCreateTaskResponse(response, task);
 
@@ -64,21 +59,34 @@ public class SGLAdapterService implements ISGLAdapterService {
         SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
                 .guid(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
                 .build();
+        SGLPayload sglPayload = null;
 
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
             sglFilesPayload.setPath(((SGLGenericTaskRequest) task).getTaskDetails().getPath());
             sglFilesPayload.setFilename(((SGLGenericTaskRequest) task).getTaskDetails().getFilename());
-        } else {
-            // FileArchive
-            // TBD
+
+            sglPayload = SGLPayload.builder()
+                    .caller(task.getCorrelationId())
+                    .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
+                    .priority(task.getPriority())
+                    .files(List.of(sglFilesPayload))
+                    .build();
+        } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+            String path = ((SGLGenericTaskRequest) task).getTaskDetails().getPath();
+            String fileName = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
+            String fullFileName = (path == null) ? "" : path+fileName;
+            sglFilesPayload.setFullFileName(fullFileName);
+
+            sglPayload = SGLPayload.builder()
+                    .caller(task.getCorrelationId())
+                    .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
+                    .priority(task.getPriority())
+                    .target(((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo())
+                    .deleteFiles(((SGLGenericTaskRequest) task).getTaskDetails().getDeleteSource())
+                    .files(List.of(sglFilesPayload))
+                    .build();
         }
 
-        SGLPayload sglPayload = SGLPayload.builder()
-                .caller(task.getCorrelationId())
-                .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
-                .priority(task.getPriority())
-                .files(List.of(sglFilesPayload))
-                .build();
 
         ObjectMapper om = new ObjectMapper();
         String request = null;

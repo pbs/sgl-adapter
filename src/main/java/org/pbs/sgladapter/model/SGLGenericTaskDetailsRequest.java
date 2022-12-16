@@ -30,5 +30,5 @@ public class SGLGenericTaskDetailsRequest {
 
     private String locatorInfo;
 
-    private boolean deleteSource;
+    private Boolean deleteSource;
 }

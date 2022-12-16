@@ -1,6 +1,7 @@
 package org.pbs.sgladapter.model.sgl;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,12 @@ public class SGLFilesPayload {
     @NotBlank(message = "guid must not be empty")
     private String guid;
 
-    @NotBlank(message = "path must not be empty")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String path;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String filename;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String fullFileName;
 }
