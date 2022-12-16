@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.mapping.Document;
+//import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("tasks")
+//@Document("tasks")
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -24,9 +24,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
         include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 
-        @JsonSubTypes.Type(value = FileRestoreTask.class, name = "FileRestore")
+        @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileRestore")
         //,
-       // @JsonSubTypes.Type(value = FileArchiveTask.class, name = "FileArchive")
+        //@JsonSubTypes.Type(value = FileArchiveTask.class, name = "FileArchive")
 })
 public abstract class Task {
     private static final Logger logger = LoggerFactory.getLogger(Task.class);

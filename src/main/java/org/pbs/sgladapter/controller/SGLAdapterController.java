@@ -1,12 +1,7 @@
 package org.pbs.sgladapter.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Valid;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.service.ISGLAdapterService;
 import org.slf4j.Logger;
@@ -23,46 +18,27 @@ public class SGLAdapterController {
 
     private ISGLAdapterService sglAdapterService;
 
-    public SGLAdapterController(ISGLAdapterService sglAdapterService)
-    {
+    public SGLAdapterController(ISGLAdapterService sglAdapterService) {
         this.sglAdapterService = sglAdapterService;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(SGLAdapterController.class);
 
     @PostMapping("/task")
-    @Operation(summary = "Create task",
-            description = "Provides capability to submit tasks for submission and monitoring")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
-                    description = "${api.response-codes.created.desc}"),
-            @ApiResponse(responseCode = "400",
-                    description = "${api.response-codes.badRequest.desc}",
-                    content = {@Content(examples = {@ExampleObject(value = "")})}),
-            @ApiResponse(responseCode = "422",
-                    description = "${api.response-codes.unprocessableEntity.desc}",
-                    content = {@Content(examples = {@ExampleObject(value = "")})})})
-    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
+
+    public ResponseEntity<Task> createTask(@RequestBody Task task) throws JsonProcessingException {
         logger.info("Task received {}", task);
-        sglAdapterService.createTask(task);
-        return new ResponseEntity<>(task, HttpStatus.CREATED);
+        Task retTask = sglAdapterService.createTask(task);
+        return new ResponseEntity<>(retTask, HttpStatus.CREATED);
     }
 
-    @GetMapping("/task/{taskId}")
-    @Operation(summary = "Get a SGL JobStatus for a given taskId",
-            description = "Provides capability to get a SGL job status for a given taskId")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "${api.response-codes.ok.desc}"),
-            @ApiResponse(responseCode = "404",
-                    description = "${api.response-codes.notFound.desc}",
-                    content = {@Content(examples = {@ExampleObject(value = "")})})})
-    public ResponseEntity<Task> getJobStatusForTaskId(@PathVariable String taskId) {
-        logger.info("Getting job status for taskId:" + taskId);
-        Task task = sglAdapterService.getJobStatus(taskId);
+    @GetMapping("/task/{taskType}/{taskId}")
+    public ResponseEntity<Task> getJobStatusForTaskId(@PathVariable String taskType,
+                                                      @PathVariable String taskId) {
+        logger.info("Getting job status for taskId:" + taskType + " - " + taskId);
+        Task task = sglAdapterService.getJobStatus(taskType, taskId);
         logger.info("Got task:" + task);
         return new ResponseEntity<>(task, HttpStatus.OK);
-
     }
 
 }
