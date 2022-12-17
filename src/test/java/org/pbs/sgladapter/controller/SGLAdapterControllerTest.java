@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
+import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
 @ExtendWith(MockitoExtension.class)
 class SGLAdapterControllerTest {
@@ -26,12 +28,25 @@ class SGLAdapterControllerTest {
     ISGLAdapterService sglAdapterService;
 
     @Test
-    void testCreateTask() throws Exception {
+    void testCreateTaskRestore() throws Exception {
         Task task = new SGLGenericTaskResponse();
         task.setTaskId("123");
+        task.setType(FILE_RESTORE.getType());
         when(sglAdapterService.createTask(any())).thenReturn(task);
         ResponseEntity<Task> responseEntity = sglAdapterController.createTask(any());
         assertEquals("123", ((SGLGenericTaskResponse)responseEntity.getBody()).getTaskId());
+        assertEquals(FILE_RESTORE.getType(), ((SGLGenericTaskResponse)responseEntity.getBody()).getType());
+    }
+
+    @Test
+    void testCreateTaskArchive() throws Exception {
+        Task task = new SGLGenericTaskResponse();
+        task.setTaskId("123");
+        task.setType(FILE_ARCHIVE.getType());
+        when(sglAdapterService.createTask(any())).thenReturn(task);
+        ResponseEntity<Task> responseEntity = sglAdapterController.createTask(any());
+        assertEquals("123", ((SGLGenericTaskResponse)responseEntity.getBody()).getTaskId());
+        assertEquals(FILE_ARCHIVE.getType(), ((SGLGenericTaskResponse)responseEntity.getBody()).getType());
     }
 
     @Test

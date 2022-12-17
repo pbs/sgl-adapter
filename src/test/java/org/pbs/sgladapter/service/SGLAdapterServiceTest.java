@@ -37,7 +37,7 @@ public class SGLAdapterServiceTest {
                 SGLGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
                         .resourceId("P123123-001").filename("P123123-001.mxf").build();
 
-        return SGLGenericTaskRequest.builder().type("FileRestore")
+        return SGLGenericTaskRequest.builder().type("FileArchive")
                 .correlationId("123e4567-e89h-12d3-a456-9AC7CBDCEE52").
                 priority(2).taskDetails(taskInputDetails);
     }
@@ -61,6 +61,24 @@ public class SGLAdapterServiceTest {
 
     }
 
+    @Test
+    public void testCreateTaskSuccessArchive() {
+        // Create a Task to be passed into the TaskService's createTask method.
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder().build();
+
+        when(mockSglAdapterClient.archive(any(String.class)))
+                .thenReturn("{\"Files\":{},\"Folders\":{},\"Success\":true,\"Errors\":[],\"RID\":1417,\"UAN\":\"4EF8E6F8-B7C0-45B5-A211-EE88DCA2DE14\",\"Message\":\"Successfully sent to archive as request id 1417\",\"Lid\":\"16122022-7d62c1aa80cd41549313618fd0eed0b2\"}");
+
+        try {
+            Task response = sglAdapterService.createTask(inputTask);
+
+            assertEquals(response.getTaskId(), "1417");
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Test
     public void testCreateTaskFailed() {
