@@ -7,16 +7,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
-import org.pbs.sgladapter.model.SGLGenericTaskDetailsRequest;
-import org.pbs.sgladapter.model.SGLGenericTaskRequest;
-import org.pbs.sgladapter.model.Task;
-import org.pbs.sgladapter.model.TaskStatus;
+import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
+import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
 @ExtendWith(MockitoExtension.class)
 public class SGLAdapterServiceTest {
@@ -30,14 +29,14 @@ public class SGLAdapterServiceTest {
     @Mock
     private SGLAdapterClient mockSglAdapterClient;
 
-    private static SGLGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder() {
+    private static SGLGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(TaskType type) {
 
         // Create a Task to be passed into the TaskService's createTask method.
         SGLGenericTaskDetailsRequest taskInputDetails =
                 SGLGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
                         .resourceId("P123123-001").filename("P123123-001.mxf").build();
 
-        return SGLGenericTaskRequest.builder().type("FileArchive")
+        return SGLGenericTaskRequest.builder().type(type.getType())
                 .correlationId("123e4567-e89h-12d3-a456-9AC7CBDCEE52").
                 priority(2).taskDetails(taskInputDetails);
     }
@@ -45,7 +44,7 @@ public class SGLAdapterServiceTest {
     @Test
     public void testCreateTaskSuccess() {
         // Create a Task to be passed into the TaskService's createTask method.
-        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder().build();
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
         when(mockSglAdapterClient.restore(any(String.class)))
                 .thenReturn("{\"Files\":{},\"totalEntriesProcessed\":0,\"Success\":true,\"Errors\":[],\"RID\":1336,\"Message\":\"Restoring 1 full file\",\"Lid\":\"26102022-af331005ae2a44a9ab19f8ed401ffee8\"}");
@@ -64,7 +63,7 @@ public class SGLAdapterServiceTest {
     @Test
     public void testCreateTaskSuccessArchive() {
         // Create a Task to be passed into the TaskService's createTask method.
-        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder().build();
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
         when(mockSglAdapterClient.archive(any(String.class)))
                 .thenReturn("{\"Files\":{},\"Folders\":{},\"Success\":true,\"Errors\":[],\"RID\":1417,\"UAN\":\"4EF8E6F8-B7C0-45B5-A211-EE88DCA2DE14\",\"Message\":\"Successfully sent to archive as request id 1417\",\"Lid\":\"16122022-7d62c1aa80cd41549313618fd0eed0b2\"}");
@@ -83,7 +82,7 @@ public class SGLAdapterServiceTest {
     @Test
     public void testCreateTaskFailed() {
         // Create a Task to be passed into the TaskService's createTask method.
-        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder().build();
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
         when(mockSglAdapterClient.restore(any(String.class)))
                 .thenReturn("{\"Files\":{},\"totalEntriesProcessed\":0,\"Success\":false,\"Errors\":[\"The request was rejected by the FlashNet XML Service. Found none of the requested assets in the archive.\"],\"RID\":0,\"Message\":\"The request was rejected by the FlashNet XML Service. Found none of the requested assets in the archive.\",\"Lid\":\"15122022-b14be94ee6a3498490f16ee3f46209db\"}");
