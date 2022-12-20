@@ -105,7 +105,7 @@ public class SGLAdapterServiceTest {
         when(mockSglAdapterClient.getTaskStatus(any(String.class)))
                 .thenReturn("{\"Job\":{\"RID\":1377,\"RunState\":1,\"ExitState\":5,\"ExitStateMessage\":\"PASSED\",\"QueuedStateCode\":0,\"QueuedStateMessage\":\"Finished\",\"Action\":2,\"Status\":0,\"DisplayName\":\"P222222-555\",\"Priority\":3,\"ExecutingServer\":\"M-MTDM0AP-LAB\",\"Group\":\"013272L6\",\"Volume\":\"013272L6\",\"Changer\":\"Lab_Quantum\",\"CallingProduct\":\"123e4567-e89b-12d3-a456-9AC7CBDCEE69\",\"CallingServer\":\"M-MTSC0AP-LAB\",\"LFK\":1896,\"QK\":0,\"Size\":19614483,\"BytesTransferred\":19614483,\"BytesVerified\":0,\"WillVerify\":false,\"Percent\":100},\"Success\":true,\"Errors\":[],\"Message\":\"Current queue status of job 1377\",\"Lid\":\"15122022-715e4e7ba4ae464db04eefaf944ebc28\"}");
 
-        Task response = sglAdapterService.getJobStatus("FileRestore", taskId);
+        TaskStatusResponse response = sglAdapterService.getJobStatus("FileRestore", taskId);
 
         assertEquals(response.getStatus(), TaskStatus.COMPLETED_SUCCESS);
 
@@ -117,7 +117,7 @@ public class SGLAdapterServiceTest {
         when(mockSglAdapterClient.getTaskStatus(any(String.class)))
                 .thenReturn("{\"Job\":{\"RID\":0,\"RunState\":0,\"ExitState\":0,\"ExitStateMessage\":null,\"QueuedStateCode\":-999,\"QueuedStateMessage\":\"No such job\",\"Action\":0,\"Status\":0,\"DisplayName\":null,\"Priority\":0,\"ExecutingServer\":null,\"Group\":null,\"Volume\":null,\"Changer\":null,\"CallingProduct\":null,\"CallingServer\":null,\"LFK\":0,\"QK\":0,\"Size\":0,\"BytesTransferred\":0,\"BytesVerified\":0,\"WillVerify\":false,\"Percent\":0},\"Success\":false,\"Errors\":[],\"Message\":null,\"Lid\":\"15122022-5524170bbf1d4df780b31d7cf6806611\"}");
 
-        Task response = sglAdapterService.getJobStatus("FileRestore", taskId);
+        TaskStatusResponse response = sglAdapterService.getJobStatus("FileRestore", taskId);
 
         assertEquals(response.getStatus(), TaskStatus.COMPLETED_FAILED);
 

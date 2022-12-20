@@ -3,6 +3,7 @@ package org.pbs.sgladapter.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.pbs.sgladapter.model.Task;
+import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.ISGLAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,12 @@ public class SGLAdapterController {
     }
 
     @GetMapping("/task/{taskType}/{taskId}")
-    public ResponseEntity<Task> getJobStatusForTaskId(@PathVariable String taskType,
-                                                      @PathVariable String taskId) {
+    public ResponseEntity<TaskStatusResponse> getJobStatusForTaskId(@PathVariable String taskType,
+                                                                    @PathVariable String taskId) {
         logger.info("Getting job status for taskId:" + taskType + " - " + taskId);
-        Task task = sglAdapterService.getJobStatus(taskType, taskId);
-        logger.info("Got task:" + task);
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        TaskStatusResponse taskStatusResponse = sglAdapterService.getJobStatus(taskType, taskId);
+        logger.info("Got taskStatusResponse:" + taskStatusResponse);
+        return new ResponseEntity<>(taskStatusResponse, HttpStatus.OK);
     }
 
 }

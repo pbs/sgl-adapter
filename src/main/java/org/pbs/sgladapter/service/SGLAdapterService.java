@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
-import org.pbs.sgladapter.model.SGLGenericTaskRequest;
-import org.pbs.sgladapter.model.SGLGenericTaskResponse;
-import org.pbs.sgladapter.model.Task;
-import org.pbs.sgladapter.model.TaskStatus;
+import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
 import org.pbs.sgladapter.model.sgl.SGLPayload;
@@ -109,6 +106,7 @@ public class SGLAdapterService implements ISGLAdapterService {
         if (!response.isEmpty() && !response.isBlank()) {
             ObjectMapper jsonMapper = new JsonMapper();
             JsonNode json = null;
+            TaskStatus status = TaskStatus.COMPLETED_SUCCESS;
             try {
                 json = jsonMapper.readTree(response);
             } catch (JsonProcessingException e) {
@@ -117,10 +115,12 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             String taskId = json.get("RID").asText();
             if (Integer.parseInt(taskId) <= 0) {
+                status = TaskStatus.COMPLETED_FAILED;
                 logger.error("Failed to create a new task for " + task.getType()
                         + " [" + response + "]");
             }
             task.setTaskId(taskId);
+            task.setStatus(status);
             ((SGLGenericTaskRequest) task).getTaskDetails().setDetails(response);
 
         }
@@ -129,17 +129,14 @@ public class SGLAdapterService implements ISGLAdapterService {
     }
 
     @Override
-    public Task getJobStatus(String taskType, String taskId) {
+    public TaskStatusResponse getJobStatus(String taskType, String taskId) {
         logger.info("inside of Service.getJobStatus");
 
         String response = sglAdapterClient.getTaskStatus(taskId);
 
         System.out.println(response);
 
-        Task responseTask = new SGLGenericTaskResponse();
-
-        responseTask.setType(taskType);
-        responseTask.setTaskId(taskId);
+        TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
 
         try {
             ObjectMapper om = new ObjectMapper();
@@ -149,8 +146,6 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             String exitStateMssg = job.getExitStateMessage();
             String queuedStateMssg = job.getQueuedStateMessage();
-
-            TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
 
             if (exitStateMssg == null || queuedStateMssg == null) {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
@@ -163,14 +158,12 @@ public class SGLAdapterService implements ISGLAdapterService {
             } else {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
             }
-
-            responseTask.setStatus(taskStatus);
-
-            ((SGLGenericTaskResponse) responseTask).setTaskDetails(sglStatusResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
-        return responseTask;
+        TaskStatusResponse taskStatusResponse = new TaskStatusResponse(taskStatus);
+
+        return taskStatusResponse;
     }
 }
