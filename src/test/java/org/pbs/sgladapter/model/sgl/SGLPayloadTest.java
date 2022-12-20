@@ -25,7 +25,7 @@ public class SGLPayloadTest {
                 .priority(1)
                 .files(List.of(new SGLFilesPayload("P123123-001",
                         "\\\\m-isilonsmb\\gpop_dev\\mxf",
-                        "P123123-001.mxf")));
+                        "P123123-001.mxf", "")));
     }
 
     @BeforeAll
