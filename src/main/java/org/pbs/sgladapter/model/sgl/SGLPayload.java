@@ -1,6 +1,8 @@
 package org.pbs.sgladapter.model.sgl;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,4 +35,11 @@ public class SGLPayload {
     @NotNull(message = "files must not be null")
     private List<SGLFilesPayload> files;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Hidden
+    private String target;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Hidden
+    private Boolean deleteFiles;
 }
