@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("v1")
+@RequestMapping("v1/sgl")
 @Tag(description = "Provides access to Tasks",
         name = "Task Resource")
 public class SGLAdapterController {
