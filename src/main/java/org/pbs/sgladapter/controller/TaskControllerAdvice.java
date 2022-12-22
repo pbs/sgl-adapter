@@ -1,6 +1,8 @@
 package org.pbs.sgladapter.controller;
 
 
+import org.pbs.sgladapter.exception.ErrorResponse;
+import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,25 +18,6 @@ import java.util.Map;
 
 @RestControllerAdvice()
 public class TaskControllerAdvice {
-
-  /*
-  @ExceptionHandler(TaskAlreadyExistsException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public final ResponseEntity<Object> taskAlreadyExistsHandler(Exception ex, WebRequest request) {
-    ErrorResponse exceptionResponse =
-        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
-  }
-
-
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  @ExceptionHandler(TaskNotFoundException.class)
-  public final ResponseEntity<Object> taskNotFoundHandler(Exception ex, WebRequest request) {
-    ErrorResponse exceptionResponse =
-        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-  }
-*/
 
   /**
    * Handles a MethodArgumentNotValidException, which is thrown if the Task passed into
@@ -55,5 +38,13 @@ public class TaskControllerAdvice {
       errors.put(fieldName, errorMessage);
     });
     return errors;
+  }
+
+  @ExceptionHandler(ValidationFailedException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public final ResponseEntity<Object> taskAlreadyExistsHandler(Exception ex, WebRequest request) {
+    ErrorResponse exceptionResponse =
+            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
   }
 }
