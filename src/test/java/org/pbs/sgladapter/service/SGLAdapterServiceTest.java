@@ -7,11 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
+import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
@@ -121,6 +122,71 @@ public class SGLAdapterServiceTest {
 
         assertEquals(response.getStatus(), TaskStatus.COMPLETED_FAILED);
 
+    }
+
+    @Test
+    public void testValidateDataMissingCorrelationId() {
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+
+        // remove inputTask
+        inputTask.setCorrelationId("");
+
+        try {
+            sglAdapterService.createTask(inputTask);
+        } catch (JsonProcessingException e) {
+            assertNull(e);
+        } catch (ValidationFailedException e) {
+            assertNotNull(e);
+            logger.info(e.getMessage());
+            assertEquals("Invalid value for: CorrelationId", e.getMessage());
+        }
+    }
+
+
+    @Test
+    public void testValidateDataForFileRestore() {
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+
+        // remove inputTask
+        inputTask.setCorrelationId("");
+        inputTask.getTaskDetails().setResourceId(null);
+        inputTask.getTaskDetails().setPath("  ");
+        inputTask.getTaskDetails().setFilename("");
+
+
+        try {
+            sglAdapterService.createTask(inputTask);
+        } catch (JsonProcessingException e) {
+            assertNull(e);
+        } catch (ValidationFailedException e) {
+            assertNotNull(e);
+            logger.info(e.getMessage());
+            assertEquals("Invalid value for: CorrelationId, ResourceId, Path, Filename", e.getMessage());
+        }
+    }
+
+
+    @Test
+    public void testValidateDataForFileArchive() {
+        SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+
+        // remove inputTask
+        inputTask.setCorrelationId("");
+        inputTask.getTaskDetails().setResourceId("");
+        inputTask.getTaskDetails().setPath(null);
+        inputTask.getTaskDetails().setFilename("");
+        inputTask.getTaskDetails().setLocatorInfo("   ");
+
+
+        try {
+            sglAdapterService.createTask(inputTask);
+        } catch (JsonProcessingException e) {
+            assertNull(e);
+        } catch (ValidationFailedException e) {
+            assertNotNull(e);
+            logger.info(e.getMessage());
+            assertEquals("Invalid value for: CorrelationId, ResourceId, Path, Filename, LocatorInfo", e.getMessage());
+        }
     }
 
 }
