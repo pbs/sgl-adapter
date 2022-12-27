@@ -206,8 +206,12 @@ public class SGLAdapterService implements ISGLAdapterService {
             SGLStatusResponse sglStatusResponse = om.readValue(response, SGLStatusResponse.class);
             Job job = sglStatusResponse.getJob();
 
-            String exitStateMssg = job.getExitStateMessage();
-            String queuedStateMssg = job.getQueuedStateMessage();
+            String exitStateMssg = null;
+            String queuedStateMssg = null;
+            if (job != null) {
+                exitStateMssg = job.getExitStateMessage();
+                queuedStateMssg = job.getQueuedStateMessage();
+            }
 
             if (exitStateMssg == null || queuedStateMssg == null) {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
