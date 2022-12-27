@@ -196,7 +196,7 @@ public class SGLAdapterService implements ISGLAdapterService {
 
         String response = sglAdapterClient.getTaskStatus(taskId);
 
-        System.out.println(response);
+        logger.info(response);
 
         TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
 
