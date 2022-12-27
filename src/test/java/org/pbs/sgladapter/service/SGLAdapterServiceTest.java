@@ -174,7 +174,7 @@ public class SGLAdapterServiceTest {
         inputTask.setCorrelationId("");
         inputTask.getTaskDetails().setResourceId("");
         inputTask.getTaskDetails().setPath(null);
-        inputTask.getTaskDetails().setFilename("");
+        inputTask.getTaskDetails().setFilename("abc.");
         inputTask.getTaskDetails().setLocatorInfo("   ");
 
 

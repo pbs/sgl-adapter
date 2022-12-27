@@ -164,9 +164,17 @@ public class SGLAdapterService implements ISGLAdapterService {
         String filename = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
         if (StringUtils.isBlank(filename)) {
             requiredData = requiredData.concat(", Filename");
+        } else {
+            if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+                // Validate Filename - must have file extension
+                if (!filename.matches("[^\\s]+(\\.(?i)[^\\s]+$)")) {
+                    requiredData = requiredData.concat(", Filename");
+                }
+            }
         }
 
         if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+
             // Validate LocatorInfo
             String locatorInfo = ((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo();
 
