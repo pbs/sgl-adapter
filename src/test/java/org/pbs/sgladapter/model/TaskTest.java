@@ -113,11 +113,11 @@ public class TaskTest {
                 .isEqualTo("priority must be greater than 0");
         violations.stream().forEach(x -> logger.info(x.getMessage()));
 
-        taskInputTask1.setPriority(6);
+        taskInputTask1.setPriority(101);
         violations = validator.validate(taskInputTask1);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
-                .isEqualTo("priority must be less than 6");
+                .isEqualTo("priority must be less than 101");
         violations.stream().forEach(x -> logger.info(x.getMessage()));
     }
 

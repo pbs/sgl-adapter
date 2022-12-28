@@ -66,6 +66,8 @@ public class SGLAdapterServiceTest {
         // Create a Task to be passed into the TaskService's createTask method.
         SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
+        inputTask.getTaskDetails().setLocatorInfo("lab_mxf_D");
+
         when(mockSglAdapterClient.archive(any(String.class)))
                 .thenReturn("{\"Files\":{},\"Folders\":{},\"Success\":true,\"Errors\":[],\"RID\":1417,\"UAN\":\"4EF8E6F8-B7C0-45B5-A211-EE88DCA2DE14\",\"Message\":\"Successfully sent to archive as request id 1417\",\"Lid\":\"16122022-7d62c1aa80cd41549313618fd0eed0b2\"}");
 
