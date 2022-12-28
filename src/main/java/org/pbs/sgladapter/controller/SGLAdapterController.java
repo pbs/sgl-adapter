@@ -1,6 +1,10 @@
 package org.pbs.sgladapter.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
@@ -10,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/sgl")
@@ -26,8 +32,11 @@ public class SGLAdapterController {
     private static final Logger logger = LoggerFactory.getLogger(SGLAdapterController.class);
 
     @PostMapping("/task")
-
-    public ResponseEntity<Task> createTask(@RequestBody Task task) throws JsonProcessingException {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400",
+                    description = "400 - Bad Request",
+                    content = {@Content(examples = {@ExampleObject(value = "")})})})
+    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) throws JsonProcessingException {
         logger.info("Task received {}", task);
         Task retTask = sglAdapterService.createTask(task);
         return new ResponseEntity<>(retTask, HttpStatus.OK);

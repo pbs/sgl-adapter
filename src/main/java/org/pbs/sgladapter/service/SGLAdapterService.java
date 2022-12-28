@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SGLAdapterClient;
+import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
@@ -32,7 +34,7 @@ public class SGLAdapterService implements ISGLAdapterService {
     }
 
     @Override
-    public Task createTask(Task task) throws JsonProcessingException {
+    public Task createTask(Task task) throws JsonProcessingException, ValidationFailedException {
         logger.info("inside of Service.createTask");
         String response = "";
         String request = prepareCreateTaskRequest(task);
@@ -40,8 +42,7 @@ public class SGLAdapterService implements ISGLAdapterService {
         logger.info("Request is : {}", request);
         if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
             response = sglAdapterClient.restore(request);
-        }
-        else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+        } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
             response = sglAdapterClient.archive(request);
         }
         logger.info(response);
@@ -51,10 +52,19 @@ public class SGLAdapterService implements ISGLAdapterService {
         return task;
     }
 
-    private String prepareCreateTaskRequest(Task task) {
+    private String prepareCreateTaskRequest(Task task) throws ValidationFailedException {
+
+        // Validate Data and throw exception if it's missing a value
+        String requiredData = validateData(task);
+
+        if (!StringUtils.isBlank(requiredData)) {
+            throw new ValidationFailedException(requiredData);
+        }
+
+        String resourceId = ((SGLGenericTaskRequest) task).getTaskDetails().getResourceId();
 
         SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
-                .guid(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
+                .guid(resourceId)
                 .build();
         SGLPayload sglPayload = null;
 
@@ -64,7 +74,7 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
-                    .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
+                    .displayName(resourceId)
                     .priority(task.getPriority())
                     .files(List.of(sglFilesPayload))
                     .build();
@@ -81,14 +91,13 @@ public class SGLAdapterService implements ISGLAdapterService {
 
             sglPayload = SGLPayload.builder()
                     .caller(task.getCorrelationId())
-                    .displayName(((SGLGenericTaskRequest) task).getTaskDetails().getResourceId())
+                    .displayName(resourceId)
                     .priority(task.getPriority())
                     .target(((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo())
                     .deleteFiles(((SGLGenericTaskRequest) task).getTaskDetails().getDeleteSource())
                     .files(List.of(sglFilesPayload))
                     .build();
         }
-
 
         ObjectMapper om = new ObjectMapper();
         String request = null;
@@ -103,7 +112,7 @@ public class SGLAdapterService implements ISGLAdapterService {
     }
 
     private Task prepareCreateTaskResponse(String response, Task task) {
-        if (!response.isEmpty() && !response.isBlank()) {
+        if (!StringUtils.isBlank(response)) {
             ObjectMapper jsonMapper = new JsonMapper();
             JsonNode json = null;
             TaskStatus status = TaskStatus.COMPLETED_SUCCESS;
@@ -128,13 +137,66 @@ public class SGLAdapterService implements ISGLAdapterService {
         return task;
     }
 
+    private String validateData(Task task) {
+
+        String requiredData = "";
+
+        // Validate CorrelationId
+        String correlationId = task.getCorrelationId();
+        if (StringUtils.isBlank(correlationId)) {
+            requiredData = requiredData.concat(", CorrelationId");
+        }
+
+        // Validate ResourceId
+        String resourceId = ((SGLGenericTaskRequest) task).getTaskDetails().getResourceId();
+
+        if (StringUtils.isBlank(resourceId)) {
+            requiredData = requiredData.concat(", ResourceId");
+        }
+
+        // Validate Path
+        String path = ((SGLGenericTaskRequest) task).getTaskDetails().getPath();
+        if (StringUtils.isBlank(path)) {
+            requiredData = requiredData.concat(", Path");
+        }
+
+        // Validate Filename
+        String filename = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
+        if (StringUtils.isBlank(filename)) {
+            requiredData = requiredData.concat(", Filename");
+        } else {
+            if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+                // Validate Filename - must have file extension
+                if (!filename.matches("[^\\s]+(\\.(?i)[^\\s]+$)")) {
+                    requiredData = requiredData.concat(", Filename");
+                }
+            }
+        }
+
+        if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
+
+            // Validate LocatorInfo
+            String locatorInfo = ((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo();
+
+            if (StringUtils.isBlank(locatorInfo)) {
+                requiredData = requiredData.concat(", LocatorInfo");
+            }
+        }
+
+        if (!StringUtils.isBlank(requiredData)) {
+            requiredData = requiredData.replaceFirst(", ", "");
+        }
+
+        return requiredData;
+    }
+
     @Override
     public TaskStatusResponse getJobStatus(String taskType, String taskId) {
         logger.info("inside of Service.getJobStatus");
 
         String response = sglAdapterClient.getTaskStatus(taskId);
 
-        System.out.println(response);
+        logger.info(response);
 
         TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
 
@@ -144,8 +206,12 @@ public class SGLAdapterService implements ISGLAdapterService {
             SGLStatusResponse sglStatusResponse = om.readValue(response, SGLStatusResponse.class);
             Job job = sglStatusResponse.getJob();
 
-            String exitStateMssg = job.getExitStateMessage();
-            String queuedStateMssg = job.getQueuedStateMessage();
+            String exitStateMssg = null;
+            String queuedStateMssg = null;
+            if (job != null) {
+                exitStateMssg = job.getExitStateMessage();
+                queuedStateMssg = job.getQueuedStateMessage();
+            }
 
             if (exitStateMssg == null || queuedStateMssg == null) {
                 taskStatus = TaskStatus.COMPLETED_FAILED;

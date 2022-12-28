@@ -44,7 +44,7 @@ public abstract class Task {
     private String type;
 
     @Min(value = 1, message = "priority must be greater than 0")
-    @Max(value = 5, message = "priority must be less than 6")
+    @Max(value = 100, message = "priority must be less than 101")
     private int priority;
 
     private TaskStatus status;

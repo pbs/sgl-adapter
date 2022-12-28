@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +28,7 @@ public class SGLGenericTaskDetailsRequest {
     // we shouldn't make it required
     private String filename;
 
-    @NotBlank(message = "resourceId must not be empty")
+    @NotEmpty(message = "resourceId must not be empty")
     private String resourceId;
 
     private String locatorInfo;
