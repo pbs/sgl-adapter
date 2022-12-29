@@ -206,20 +206,22 @@ public class SGLAdapterService implements ISGLAdapterService {
             SGLStatusResponse sglStatusResponse = om.readValue(response, SGLStatusResponse.class);
             Job job = sglStatusResponse.getJob();
 
-            String exitStateMssg = null;
-            String queuedStateMssg = null;
+            int exitState = 1;
             if (job != null) {
-                exitStateMssg = job.getExitStateMessage();
-                queuedStateMssg = job.getQueuedStateMessage();
+                exitState = job.getExitState();
             }
 
-            if (exitStateMssg == null || queuedStateMssg == null) {
-                taskStatus = TaskStatus.COMPLETED_FAILED;
-            } else if ("LiVE".equalsIgnoreCase(exitStateMssg) &&
-                    "Running".equalsIgnoreCase(queuedStateMssg)) {
+            //The finished status of the job. One of the following values:
+            // 0 (NO_SUCH_JOB)
+            // 1 (LIVE)
+            // 2 (KILLED)
+            // 3 (STOPPED)
+            // 4 (FAILED)
+            // 5 (PASSED)
+            // +6 (PASSED_WITH_WARNING
+            if (exitState == 1) {
                 taskStatus = TaskStatus.IN_PROGRESS;
-            } else if ("PASSED".equalsIgnoreCase(exitStateMssg) &&
-                    "Finished".equalsIgnoreCase(queuedStateMssg)) {
+            } else if (exitState >= 5) {
                 taskStatus = TaskStatus.COMPLETED_SUCCESS;
             } else {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
