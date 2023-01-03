@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.pbs.sgladapter.adapter.SGLAdapterClient;
+import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.SGLGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
@@ -29,9 +29,9 @@ public class SglAdapterServiceImpl implements SglAdapterService {
   private static final Logger logger
       = LoggerFactory.getLogger(SglAdapterServiceImpl.class);
 
-  private SGLAdapterClient sglAdapterClient;
+  private SglAdapterClient sglAdapterClient;
 
-  public SglAdapterServiceImpl(SGLAdapterClient sglAdapterClient) {
+  public SglAdapterServiceImpl(SglAdapterClient sglAdapterClient) {
     this.sglAdapterClient = sglAdapterClient;
   }
 

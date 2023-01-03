@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.pbs.sgladapter.adapter.SGLAdapterClient;
+import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.SGLGenericTaskDetailsRequest;
 import org.pbs.sgladapter.model.SGLGenericTaskRequest;
@@ -35,7 +35,7 @@ public class SglAdapterServiceImplTest {
   private SglAdapterServiceImpl sglAdapterServiceImpl;
 
   @Mock
-  private SGLAdapterClient mockSglAdapterClient;
+  private SglAdapterClient mockSglAdapterClient;
 
   private static SGLGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
       TaskType type) {
