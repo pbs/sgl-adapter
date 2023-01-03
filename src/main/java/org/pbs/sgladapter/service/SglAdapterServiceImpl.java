@@ -24,14 +24,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SGLAdapterService implements ISGLAdapterService {
+public class SglAdapterServiceImpl implements ISGLAdapterService {
 
   private static final Logger logger
-      = LoggerFactory.getLogger(SGLAdapterService.class);
+      = LoggerFactory.getLogger(SglAdapterServiceImpl.class);
 
   private SGLAdapterClient sglAdapterClient;
 
-  public SGLAdapterService(SGLAdapterClient sglAdapterClient) {
+  public SglAdapterServiceImpl(SGLAdapterClient sglAdapterClient) {
     this.sglAdapterClient = sglAdapterClient;
   }
 

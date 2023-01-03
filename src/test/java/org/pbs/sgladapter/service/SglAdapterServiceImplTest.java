@@ -26,13 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class SGLAdapterServiceTest {
+public class SglAdapterServiceImplTest {
 
 
-  private static final Logger logger = LoggerFactory.getLogger(SGLAdapterServiceTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(SglAdapterServiceImplTest.class);
 
   @InjectMocks
-  private SGLAdapterService sglAdapterService;
+  private SglAdapterServiceImpl sglAdapterServiceImpl;
 
   @Mock
   private SGLAdapterClient mockSglAdapterClient;
@@ -60,7 +60,7 @@ public class SGLAdapterServiceTest {
             "{\"Files\":{},\"totalEntriesProcessed\":0,\"Success\":true,\"Errors\":[],\"RID\":1336,\"Message\":\"Restoring 1 full file\",\"Lid\":\"26102022-af331005ae2a44a9ab19f8ed401ffee8\"}");
 
     try {
-      Task response = sglAdapterService.createTask(inputTask);
+      Task response = sglAdapterServiceImpl.createTask(inputTask);
 
       assertEquals(response.getTaskId(), "1336");
 
@@ -82,7 +82,7 @@ public class SGLAdapterServiceTest {
             "{\"Files\":{},\"Folders\":{},\"Success\":true,\"Errors\":[],\"RID\":1417,\"UAN\":\"4EF8E6F8-B7C0-45B5-A211-EE88DCA2DE14\",\"Message\":\"Successfully sent to archive as request id 1417\",\"Lid\":\"16122022-7d62c1aa80cd41549313618fd0eed0b2\"}");
 
     try {
-      Task response = sglAdapterService.createTask(inputTask);
+      Task response = sglAdapterServiceImpl.createTask(inputTask);
 
       assertEquals(response.getTaskId(), "1417");
 
@@ -102,7 +102,7 @@ public class SGLAdapterServiceTest {
             "{\"Files\":{},\"totalEntriesProcessed\":0,\"Success\":false,\"Errors\":[\"The request was rejected by the FlashNet XML Service. Found none of the requested assets in the archive.\"],\"RID\":0,\"Message\":\"The request was rejected by the FlashNet XML Service. Found none of the requested assets in the archive.\",\"Lid\":\"15122022-b14be94ee6a3498490f16ee3f46209db\"}");
 
     try {
-      Task response = sglAdapterService.createTask(inputTask);
+      Task response = sglAdapterServiceImpl.createTask(inputTask);
 
       assertEquals(response.getTaskId(), "0");
 
@@ -120,7 +120,7 @@ public class SGLAdapterServiceTest {
         .thenReturn(
             "{\"Job\":{\"RID\":1377,\"RunState\":1,\"ExitState\":5,\"ExitStateMessage\":\"PASSED\",\"QueuedStateCode\":0,\"QueuedStateMessage\":\"Finished\",\"Action\":2,\"Status\":0,\"DisplayName\":\"P222222-555\",\"Priority\":3,\"ExecutingServer\":\"M-MTDM0AP-LAB\",\"Group\":\"013272L6\",\"Volume\":\"013272L6\",\"Changer\":\"Lab_Quantum\",\"CallingProduct\":\"123e4567-e89b-12d3-a456-9AC7CBDCEE69\",\"CallingServer\":\"M-MTSC0AP-LAB\",\"LFK\":1896,\"QK\":0,\"Size\":19614483,\"BytesTransferred\":19614483,\"BytesVerified\":0,\"WillVerify\":false,\"Percent\":100},\"Success\":true,\"Errors\":[],\"Message\":\"Current queue status of job 1377\",\"Lid\":\"15122022-715e4e7ba4ae464db04eefaf944ebc28\"}");
 
-    TaskStatusResponse response = sglAdapterService.getJobStatus("FileRestore", taskId);
+    TaskStatusResponse response = sglAdapterServiceImpl.getJobStatus("FileRestore", taskId);
 
     assertEquals(response.getStatus(), TaskStatus.COMPLETED_SUCCESS);
 
@@ -133,7 +133,7 @@ public class SGLAdapterServiceTest {
         .thenReturn(
             "{\"Job\":{\"RID\":0,\"RunState\":0,\"ExitState\":0,\"ExitStateMessage\":null,\"QueuedStateCode\":-999,\"QueuedStateMessage\":\"No such job\",\"Action\":0,\"Status\":0,\"DisplayName\":null,\"Priority\":0,\"ExecutingServer\":null,\"Group\":null,\"Volume\":null,\"Changer\":null,\"CallingProduct\":null,\"CallingServer\":null,\"LFK\":0,\"QK\":0,\"Size\":0,\"BytesTransferred\":0,\"BytesVerified\":0,\"WillVerify\":false,\"Percent\":0},\"Success\":false,\"Errors\":[],\"Message\":null,\"Lid\":\"15122022-5524170bbf1d4df780b31d7cf6806611\"}");
 
-    TaskStatusResponse response = sglAdapterService.getJobStatus("FileRestore", taskId);
+    TaskStatusResponse response = sglAdapterServiceImpl.getJobStatus("FileRestore", taskId);
 
     assertEquals(response.getStatus(), TaskStatus.COMPLETED_FAILED);
 
@@ -147,7 +147,7 @@ public class SGLAdapterServiceTest {
     inputTask.setCorrelationId("");
 
     try {
-      sglAdapterService.createTask(inputTask);
+      sglAdapterServiceImpl.createTask(inputTask);
     } catch (JsonProcessingException e) {
       assertNull(e);
     } catch (ValidationFailedException e) {
@@ -170,7 +170,7 @@ public class SGLAdapterServiceTest {
 
 
     try {
-      sglAdapterService.createTask(inputTask);
+      sglAdapterServiceImpl.createTask(inputTask);
     } catch (JsonProcessingException e) {
       assertNull(e);
     } catch (ValidationFailedException e) {
@@ -194,7 +194,7 @@ public class SGLAdapterServiceTest {
 
 
     try {
-      sglAdapterService.createTask(inputTask);
+      sglAdapterServiceImpl.createTask(inputTask);
     } catch (JsonProcessingException e) {
       assertNull(e);
     } catch (ValidationFailedException e) {
