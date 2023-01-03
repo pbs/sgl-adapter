@@ -18,6 +18,10 @@ public class TaskTest {
   private static final Logger logger = LoggerFactory.getLogger(TaskTest.class);
   private static Validator validator;
 
+  @SuperBuilder
+  private static class MockTask extends Task {
+  }
+
   private static Task.TaskBuilder buildBaseTaskBuilder() {
     return MockTask.builder().type("FileRestore")
         .correlationId("123e4567-e89b-12d3-a456-9AC7CBDCEE52").priority(2);
@@ -165,9 +169,4 @@ public class TaskTest {
   public void testEqualsAndHashCode() {
     EqualsVerifier.simple().forClass(Task.class).verify();
   }
-}
-
-
-@SuperBuilder
-class MockTask extends Task {
 }
