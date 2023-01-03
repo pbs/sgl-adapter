@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
-import org.pbs.sgladapter.model.SGLGenericTaskDetailsRequest;
+import org.pbs.sgladapter.model.SglGenericTaskDetailsRequest;
 import org.pbs.sgladapter.model.SGLGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
@@ -41,8 +41,8 @@ public class SglAdapterServiceImplTest {
       TaskType type) {
 
     // Create a Task to be passed into the TaskService's createTask method.
-    SGLGenericTaskDetailsRequest taskInputDetails =
-        SGLGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
+    SglGenericTaskDetailsRequest taskInputDetails =
+        SglGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
             .resourceId("P123123-001").filename("P123123-001.mxf").build();
 
     return SGLGenericTaskRequest.builder().type(type.getType())

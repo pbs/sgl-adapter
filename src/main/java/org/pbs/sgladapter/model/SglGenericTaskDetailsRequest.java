@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
     type = "object",
     title = "FileRestoreTaskDetails"
 )
-public class SGLGenericTaskDetailsRequest {
+public class SglGenericTaskDetailsRequest {
 
   @NotBlank(message = "path must not be empty")
   private String path;
