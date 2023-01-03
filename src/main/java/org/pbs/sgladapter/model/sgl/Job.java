@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Job {
   @JsonProperty("RID")
-  private String rID;
+  private String rid;
   @JsonProperty("RunState")
   private int runState;
   @JsonProperty("ExitState")
@@ -38,9 +38,9 @@ public class Job {
   @JsonProperty("CallingServer")
   private String callingServer;
   @JsonProperty("LFK")
-  private int lFK;
+  private int lfk;
   @JsonProperty("QK")
-  private int qK;
+  private int qk;
   @JsonProperty("Size")
   private int size;
   @JsonProperty("BytesTransferred")
