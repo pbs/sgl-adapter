@@ -17,7 +17,8 @@ public class SglGenericTaskRequestDetailsRequestTest {
       LoggerFactory.getLogger(SglGenericTaskRequestDetailsRequestTest.class);
   private static Validator validator;
 
-  private static SglGenericTaskDetailsRequest.SglGenericTaskDetailsRequestBuilder buildBaseFileRestoreTaskDetailsBuilder() {
+  private static SglGenericTaskDetailsRequest.SglGenericTaskDetailsRequestBuilder
+      buildBaseFileRestoreTaskDetailsBuilder() {
     return SglGenericTaskDetailsRequest.builder()
         .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
         .resourceId("P123123-001")
