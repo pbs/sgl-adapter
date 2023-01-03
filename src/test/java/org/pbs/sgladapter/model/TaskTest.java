@@ -52,8 +52,6 @@ public class TaskTest {
 
     Set<ConstraintViolation<Task>> violations = validator.validate(taskInputTask1);
     assertThat(violations).hasSize(1);
-//        assertThat(violations.iterator().next().getMessage())
-//                .isEqualTo("must match \"FileRestore|FileArchive\"");
     violations.stream().forEach(x -> logger.info(x.getMessage()));
   }
 
@@ -70,7 +68,8 @@ public class TaskTest {
   }
 
   /**
-   * Tests that providing an invalid CorrelationId for a Task results in the expected validation error.
+   * Tests that providing an invalid CorrelationId for a Task results in the expected validation
+   * error.
    */
   @Test
   public void testInvalidCorrelationId() {
@@ -160,7 +159,7 @@ public class TaskTest {
   }
 
   /**
-   * Verifies equals() and hashCode() methods with library
+   * Verifies equals() and hashCode() methods with library.
    */
   @Test
   public void testEqualsAndHashCode() {
