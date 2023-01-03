@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SGLGenericTaskRequestDetailsRequestTest {
+public class SglGenericTaskRequestDetailsRequestTest {
   private static final Logger logger =
-      LoggerFactory.getLogger(SGLGenericTaskRequestDetailsRequestTest.class);
+      LoggerFactory.getLogger(SglGenericTaskRequestDetailsRequestTest.class);
   private static Validator validator;
 
   private static SglGenericTaskDetailsRequest.SGLGenericTaskDetailsRequestBuilder buildBaseFileRestoreTaskDetailsBuilder() {

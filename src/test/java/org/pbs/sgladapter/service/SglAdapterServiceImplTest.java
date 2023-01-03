@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.SglGenericTaskDetailsRequest;
-import org.pbs.sgladapter.model.SGLGenericTaskRequest;
+import org.pbs.sgladapter.model.SglGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
 import org.pbs.sgladapter.model.TaskStatusResponse;
@@ -37,7 +37,7 @@ public class SglAdapterServiceImplTest {
   @Mock
   private SglAdapterClient mockSglAdapterClient;
 
-  private static SGLGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
+  private static SglGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
       TaskType type) {
 
     // Create a Task to be passed into the TaskService's createTask method.
@@ -45,7 +45,7 @@ public class SglAdapterServiceImplTest {
         SglGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
             .resourceId("P123123-001").filename("P123123-001.mxf").build();
 
-    return SGLGenericTaskRequest.builder().type(type.getType())
+    return SglGenericTaskRequest.builder().type(type.getType())
         .correlationId("123e4567-e89h-12d3-a456-9AC7CBDCEE52").
         priority(2).taskDetails(taskInputDetails);
   }
@@ -53,7 +53,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskSuccess() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
         .thenReturn(
@@ -73,7 +73,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskSuccessArchive() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
     inputTask.getTaskDetails().setLocatorInfo("lab_mxf_D");
 
@@ -95,7 +95,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskFailed() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
         .thenReturn(
@@ -141,7 +141,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataMissingCorrelationId() {
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");
@@ -160,7 +160,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataForFileRestore() {
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");
@@ -183,7 +183,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataForFileArchive() {
-    SGLGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");

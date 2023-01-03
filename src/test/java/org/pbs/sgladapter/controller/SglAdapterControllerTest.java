@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.pbs.sgladapter.model.SGLGenericTaskRequest;
+import org.pbs.sgladapter.model.SglGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
 import org.pbs.sgladapter.model.TaskStatusResponse;
@@ -30,26 +30,26 @@ class SglAdapterControllerTest {
 
   @Test
   void testCreateTaskRestore() throws Exception {
-    Task task = new SGLGenericTaskRequest();
+    Task task = new SglGenericTaskRequest();
     task.setTaskId("123");
     task.setType(FILE_RESTORE.getType());
     when(sglAdapterService.createTask(any())).thenReturn(task);
     ResponseEntity<Task> responseEntity = sglAdapterController.createTask(any());
-    assertEquals("123", ((SGLGenericTaskRequest) responseEntity.getBody()).getTaskId());
+    assertEquals("123", ((SglGenericTaskRequest) responseEntity.getBody()).getTaskId());
     assertEquals(FILE_RESTORE.getType(),
-        ((SGLGenericTaskRequest) responseEntity.getBody()).getType());
+        ((SglGenericTaskRequest) responseEntity.getBody()).getType());
   }
 
   @Test
   void testCreateTaskArchive() throws Exception {
-    Task task = new SGLGenericTaskRequest();
+    Task task = new SglGenericTaskRequest();
     task.setTaskId("123");
     task.setType(FILE_ARCHIVE.getType());
     when(sglAdapterService.createTask(any())).thenReturn(task);
     ResponseEntity<Task> responseEntity = sglAdapterController.createTask(any());
-    assertEquals("123", ((SGLGenericTaskRequest) responseEntity.getBody()).getTaskId());
+    assertEquals("123", ((SglGenericTaskRequest) responseEntity.getBody()).getTaskId());
     assertEquals(FILE_ARCHIVE.getType(),
-        ((SGLGenericTaskRequest) responseEntity.getBody()).getType());
+        ((SglGenericTaskRequest) responseEntity.getBody()).getType());
   }
 
   @Test

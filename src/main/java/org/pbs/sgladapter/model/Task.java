@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileRestore"),
-    @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileArchive")
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileRestore"),
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileArchive")
 })
 public abstract class Task {
   private static final Logger logger = LoggerFactory.getLogger(Task.class);

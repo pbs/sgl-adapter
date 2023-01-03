@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
-import org.pbs.sgladapter.model.SGLGenericTaskRequest;
+import org.pbs.sgladapter.model.SglGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
 import org.pbs.sgladapter.model.TaskStatusResponse;
@@ -63,7 +63,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
       throw new ValidationFailedException(requiredData);
     }
 
-    String resourceId = ((SGLGenericTaskRequest) task).getTaskDetails().getResourceId();
+    String resourceId = ((SglGenericTaskRequest) task).getTaskDetails().getResourceId();
 
     SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
         .guid(resourceId)
@@ -71,8 +71,8 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     SGLPayload sglPayload = null;
 
     if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
-      sglFilesPayload.setPath(((SGLGenericTaskRequest) task).getTaskDetails().getPath());
-      sglFilesPayload.setFilename(((SGLGenericTaskRequest) task).getTaskDetails().getFilename());
+      sglFilesPayload.setPath(((SglGenericTaskRequest) task).getTaskDetails().getPath());
+      sglFilesPayload.setFilename(((SglGenericTaskRequest) task).getTaskDetails().getFilename());
 
       sglPayload = SGLPayload.builder()
           .caller(task.getCorrelationId())
@@ -81,13 +81,13 @@ public class SglAdapterServiceImpl implements SglAdapterService {
           .files(List.of(sglFilesPayload))
           .build();
     } else if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
-      String path = ((SGLGenericTaskRequest) task).getTaskDetails().getPath();
+      String path = ((SglGenericTaskRequest) task).getTaskDetails().getPath();
       if (path != null && !path.isBlank()) {
         if (!path.trim().endsWith("\\")) {
           path = path.trim().concat("\\");
         }
       }
-      String fileName = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
+      String fileName = ((SglGenericTaskRequest) task).getTaskDetails().getFilename();
       String fullFileName = (path == null) ? "" : path + fileName;
       sglFilesPayload.setFullFileName(fullFileName);
 
@@ -95,8 +95,8 @@ public class SglAdapterServiceImpl implements SglAdapterService {
           .caller(task.getCorrelationId())
           .displayName(resourceId)
           .priority(task.getPriority())
-          .target(((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo())
-          .deleteFiles(((SGLGenericTaskRequest) task).getTaskDetails().getDeleteSource())
+          .target(((SglGenericTaskRequest) task).getTaskDetails().getLocatorInfo())
+          .deleteFiles(((SglGenericTaskRequest) task).getTaskDetails().getDeleteSource())
           .files(List.of(sglFilesPayload))
           .build();
     }
@@ -132,7 +132,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
       }
       task.setTaskId(taskId);
       task.setStatus(status);
-      ((SGLGenericTaskRequest) task).getTaskDetails().setDetails(response);
+      ((SglGenericTaskRequest) task).getTaskDetails().setDetails(response);
 
     }
 
@@ -150,20 +150,20 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     }
 
     // Validate ResourceId
-    String resourceId = ((SGLGenericTaskRequest) task).getTaskDetails().getResourceId();
+    String resourceId = ((SglGenericTaskRequest) task).getTaskDetails().getResourceId();
 
     if (StringUtils.isBlank(resourceId)) {
       requiredData = requiredData.concat(", ResourceId");
     }
 
     // Validate Path
-    String path = ((SGLGenericTaskRequest) task).getTaskDetails().getPath();
+    String path = ((SglGenericTaskRequest) task).getTaskDetails().getPath();
     if (StringUtils.isBlank(path)) {
       requiredData = requiredData.concat(", Path");
     }
 
     // Validate Filename
-    String filename = ((SGLGenericTaskRequest) task).getTaskDetails().getFilename();
+    String filename = ((SglGenericTaskRequest) task).getTaskDetails().getFilename();
     if (StringUtils.isBlank(filename)) {
       requiredData = requiredData.concat(", Filename");
     } else {
@@ -178,7 +178,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     if (FILE_ARCHIVE.getType().equalsIgnoreCase(task.getType())) {
 
       // Validate LocatorInfo
-      String locatorInfo = ((SGLGenericTaskRequest) task).getTaskDetails().getLocatorInfo();
+      String locatorInfo = ((SglGenericTaskRequest) task).getTaskDetails().getLocatorInfo();
 
       if (StringUtils.isBlank(locatorInfo)) {
         requiredData = requiredData.concat(", LocatorInfo");
