@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 
-public interface ISGLAdapterService {
+public interface SglAdapterService {
 
   public Task createTask(Task task) throws JsonProcessingException;
 

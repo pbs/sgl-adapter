@@ -15,7 +15,7 @@ import org.pbs.sgladapter.model.SGLGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
 import org.pbs.sgladapter.model.TaskStatusResponse;
-import org.pbs.sgladapter.service.ISGLAdapterService;
+import org.pbs.sgladapter.service.SglAdapterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -26,7 +26,7 @@ class SGLAdapterControllerTest {
   SGLAdapterController sglAdapterController;
 
   @Mock
-  ISGLAdapterService sglAdapterService;
+  SglAdapterService sglAdapterService;
 
   @Test
   void testCreateTaskRestore() throws Exception {

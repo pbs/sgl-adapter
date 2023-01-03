@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
-import org.pbs.sgladapter.service.ISGLAdapterService;
+import org.pbs.sgladapter.service.SglAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class SGLAdapterController {
 
   private static final Logger logger = LoggerFactory.getLogger(SGLAdapterController.class);
-  private ISGLAdapterService sglAdapterService;
+  private SglAdapterService sglAdapterService;
 
-  public SGLAdapterController(ISGLAdapterService sglAdapterService) {
+  public SGLAdapterController(SglAdapterService sglAdapterService) {
     this.sglAdapterService = sglAdapterService;
   }
 

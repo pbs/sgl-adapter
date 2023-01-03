@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SglAdapterServiceImpl implements ISGLAdapterService {
+public class SglAdapterServiceImpl implements SglAdapterService {
 
   private static final Logger logger
       = LoggerFactory.getLogger(SglAdapterServiceImpl.class);
