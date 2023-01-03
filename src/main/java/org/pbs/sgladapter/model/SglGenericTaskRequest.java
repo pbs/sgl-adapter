@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class SGLGenericTaskRequest extends Task {
-    private SGLGenericTaskDetailsRequest taskDetails;
+public class SglGenericTaskRequest extends Task {
+  private SglGenericTaskDetailsRequest taskDetails;
 
 }

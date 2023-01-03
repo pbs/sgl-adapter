@@ -21,31 +21,31 @@ import org.slf4j.LoggerFactory;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
+    include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileRestore"),
-        @JsonSubTypes.Type(value = SGLGenericTaskRequest.class, name = "FileArchive")
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileRestore"),
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileArchive")
 })
 public abstract class Task {
-    private static final Logger logger = LoggerFactory.getLogger(Task.class);
+  private static final Logger logger = LoggerFactory.getLogger(Task.class);
 
-    @Pattern(
-            regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-            message = "correlationId must be a valid GUID")
-    private String correlationId;
+  @Pattern(
+      regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
+      message = "correlationId must be a valid GUID")
+  private String correlationId;
 
-    // Will be null or empty until Task has been submitted to backend vendor system
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Hidden
-    private String taskId;
+  // Will be null or empty until Task has been submitted to backend vendor system
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Hidden
+  private String taskId;
 
-    @Pattern.List({@Pattern(regexp = "FileRestore|FileArchive")})
-    //@Pattern.List({@Pattern(regexp = "FileRestore")})
-    private String type;
+  @Pattern.List({@Pattern(regexp = "FileRestore|FileArchive")})
+  //@Pattern.List({@Pattern(regexp = "FileRestore")})
+  private String type;
 
-    @Min(value = 1, message = "priority must be greater than 0")
-    @Max(value = 100, message = "priority must be less than 101")
-    private int priority;
+  @Min(value = 1, message = "priority must be greater than 0")
+  @Max(value = 100, message = "priority must be less than 101")
+  private int priority;
 
-    private TaskStatus status;
+  private TaskStatus status;
 }
