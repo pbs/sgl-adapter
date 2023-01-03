@@ -17,7 +17,7 @@ public class SglPayloadTest {
   private static final Logger logger = LoggerFactory.getLogger(SglPayloadTest.class);
   private static Validator validator;
 
-  private static SglPayload.SglPayloadBuilder buildBaseSGLFilePayloadBuilder() {
+  private static SglPayload.SglPayloadBuilder buildBaseSglFilePayloadBuilder() {
     return SglPayload.builder()
         .caller("123e4567-e89b-12d3-a456-9AC7CBDCEE52")
         .displayName("P123123-001")
@@ -38,7 +38,7 @@ public class SglPayloadTest {
    */
   @Test
   public void testValidFileRestoreTaskDetails() {
-    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().build();
+    SglPayload sglPayload = buildBaseSglFilePayloadBuilder().build();
     Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(0);
   }
@@ -49,7 +49,7 @@ public class SglPayloadTest {
   @Test
   public void testInvalidCaller() {
     String invalidCaller = "";
-    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().caller(invalidCaller).build();
+    SglPayload sglPayload = buildBaseSglFilePayloadBuilder().caller(invalidCaller).build();
 
     Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(1);
@@ -63,7 +63,7 @@ public class SglPayloadTest {
   @Test
   public void tesValidEmptyDisplayName() {
     String emptyDisplayName = "";
-    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().displayName(emptyDisplayName).build();
+    SglPayload sglPayload = buildBaseSglFilePayloadBuilder().displayName(emptyDisplayName).build();
 
     Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(0);
@@ -75,7 +75,7 @@ public class SglPayloadTest {
   @Test
   public void testInvalidPriority() {
     Integer invalidPriority = 6;
-    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().priority(invalidPriority).build();
+    SglPayload sglPayload = buildBaseSglFilePayloadBuilder().priority(invalidPriority).build();
 
     Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(1);

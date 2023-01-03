@@ -16,7 +16,7 @@ public class SglFilesPayloadTest {
   private static final Logger logger = LoggerFactory.getLogger(SglFilesPayloadTest.class);
   private static Validator validator;
 
-  private static SglFilesPayload.SglFilesPayloadBuilder buildBaseSGLFilePayloadBuilder() {
+  private static SglFilesPayload.SglFilesPayloadBuilder buildBaseSglFilePayloadBuilder() {
     return SglFilesPayload.builder()
         .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
         .guid("P123123-001")
@@ -34,7 +34,7 @@ public class SglFilesPayloadTest {
    */
   @Test
   public void testValidFileRestoreTaskDetails() {
-    SglFilesPayload sglFilesPayload = buildBaseSGLFilePayloadBuilder().build();
+    SglFilesPayload sglFilesPayload = buildBaseSglFilePayloadBuilder().build();
     Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(0);
   }
@@ -46,7 +46,7 @@ public class SglFilesPayloadTest {
   public void tesValidEmptyFilename() {
     String invalidFilename = "";
     SglFilesPayload sglFilesPayload =
-        buildBaseSGLFilePayloadBuilder().filename(invalidFilename).build();
+        buildBaseSglFilePayloadBuilder().filename(invalidFilename).build();
 
     Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(0);
@@ -59,7 +59,7 @@ public class SglFilesPayloadTest {
   public void testInvalidGuid() {
     String invalidFilename = "";
     SglFilesPayload sglFilesPayload =
-        buildBaseSGLFilePayloadBuilder().guid(invalidFilename).build();
+        buildBaseSglFilePayloadBuilder().guid(invalidFilename).build();
 
     Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(1);

@@ -37,7 +37,7 @@ public class SglAdapterServiceImplTest {
   @Mock
   private SglAdapterClient mockSglAdapterClient;
 
-  private static SglGenericTaskRequest.SglGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
+  private static SglGenericTaskRequest.SglGenericTaskRequestBuilder buildBaseSglGenericTaskRequestBuilder(
       TaskType type) {
 
     // Create a Task to be passed into the TaskService's createTask method.
@@ -53,7 +53,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskSuccess() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
         .thenReturn(
@@ -73,7 +73,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskSuccessArchive() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
     inputTask.getTaskDetails().setLocatorInfo("lab_mxf_D");
 
@@ -95,7 +95,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskFailed() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
         .thenReturn(
@@ -141,7 +141,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataMissingCorrelationId() {
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");
@@ -160,7 +160,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataForFileRestore() {
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");
@@ -183,7 +183,7 @@ public class SglAdapterServiceImplTest {
 
   @Test
   public void testValidateDataForFileArchive() {
-    SglGenericTaskRequest inputTask = buildBaseSGLGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_ARCHIVE).build();
 
     // remove inputTask
     inputTask.setCorrelationId("");
