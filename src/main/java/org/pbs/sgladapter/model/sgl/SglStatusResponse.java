@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lombok.Data;
 
 @Data
-public class SGLStatusResponse {
+public class SglStatusResponse {
   @JsonProperty("Job")
   private Job job;
   @JsonProperty("Success")

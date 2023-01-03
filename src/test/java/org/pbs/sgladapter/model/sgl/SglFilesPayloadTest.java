@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SGLFilesPayloadTest {
-  private static final Logger logger = LoggerFactory.getLogger(SGLFilesPayloadTest.class);
+public class SglFilesPayloadTest {
+  private static final Logger logger = LoggerFactory.getLogger(SglFilesPayloadTest.class);
   private static Validator validator;
 
-  private static SGLFilesPayload.SGLFilesPayloadBuilder buildBaseSGLFilePayloadBuilder() {
-    return SGLFilesPayload.builder()
+  private static SglFilesPayload.SglFilesPayloadBuilder buildBaseSGLFilePayloadBuilder() {
+    return SglFilesPayload.builder()
         .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
         .guid("P123123-001")
         .filename("P123123-001.mxf");
@@ -34,8 +34,8 @@ public class SGLFilesPayloadTest {
    */
   @Test
   public void testValidFileRestoreTaskDetails() {
-    SGLFilesPayload sglFilesPayload = buildBaseSGLFilePayloadBuilder().build();
-    Set<ConstraintViolation<SGLFilesPayload>> violations = validator.validate(sglFilesPayload);
+    SglFilesPayload sglFilesPayload = buildBaseSGLFilePayloadBuilder().build();
+    Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(0);
   }
 
@@ -45,10 +45,10 @@ public class SGLFilesPayloadTest {
   @Test
   public void tesValidEmptyFilename() {
     String invalidFilename = "";
-    SGLFilesPayload sglFilesPayload =
+    SglFilesPayload sglFilesPayload =
         buildBaseSGLFilePayloadBuilder().filename(invalidFilename).build();
 
-    Set<ConstraintViolation<SGLFilesPayload>> violations = validator.validate(sglFilesPayload);
+    Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(0);
   }
 
@@ -58,10 +58,10 @@ public class SGLFilesPayloadTest {
   @Test
   public void testInvalidGuid() {
     String invalidFilename = "";
-    SGLFilesPayload sglFilesPayload =
+    SglFilesPayload sglFilesPayload =
         buildBaseSGLFilePayloadBuilder().guid(invalidFilename).build();
 
-    Set<ConstraintViolation<SGLFilesPayload>> violations = validator.validate(sglFilesPayload);
+    Set<ConstraintViolation<SglFilesPayload>> violations = validator.validate(sglFilesPayload);
     assertThat(violations).hasSize(1);
     violations.stream().forEach(x -> logger.info(x.getMessage()));
   }

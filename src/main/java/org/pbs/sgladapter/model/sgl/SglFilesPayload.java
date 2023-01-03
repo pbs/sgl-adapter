@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
     type = "object",
     title = "Files"
 )
-public class SGLFilesPayload {
+public class SglFilesPayload {
 
   @NotBlank(message = "guid must not be empty")
   private String guid;

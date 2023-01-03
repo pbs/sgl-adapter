@@ -37,7 +37,7 @@ public class SglAdapterServiceImplTest {
   @Mock
   private SglAdapterClient mockSglAdapterClient;
 
-  private static SglGenericTaskRequest.SGLGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
+  private static SglGenericTaskRequest.SglGenericTaskRequestBuilder buildBaseSGLGenericTaskRequestBuilder(
       TaskType type) {
 
     // Create a Task to be passed into the TaskService's createTask method.

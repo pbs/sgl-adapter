@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
-public class SGLPayload {
-  private static final Logger logger = LoggerFactory.getLogger(SGLPayload.class);
+public class SglPayload {
+  private static final Logger logger = LoggerFactory.getLogger(SglPayload.class);
 
   @NotBlank(message = "caller must not be empty")
   private String caller;
@@ -36,7 +36,7 @@ public class SGLPayload {
   private Integer priority;
 
   @NotNull(message = "files must not be null")
-  private List<SGLFilesPayload> files;
+  private List<SglFilesPayload> files;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @Hidden

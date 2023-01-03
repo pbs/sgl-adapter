@@ -16,9 +16,9 @@ import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatus;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.model.sgl.Job;
-import org.pbs.sgladapter.model.sgl.SGLFilesPayload;
-import org.pbs.sgladapter.model.sgl.SGLPayload;
-import org.pbs.sgladapter.model.sgl.SGLStatusResponse;
+import org.pbs.sgladapter.model.sgl.SglFilesPayload;
+import org.pbs.sgladapter.model.sgl.SglPayload;
+import org.pbs.sgladapter.model.sgl.SglStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -65,16 +65,16 @@ public class SglAdapterServiceImpl implements SglAdapterService {
 
     String resourceId = ((SglGenericTaskRequest) task).getTaskDetails().getResourceId();
 
-    SGLFilesPayload sglFilesPayload = SGLFilesPayload.builder()
+    SglFilesPayload sglFilesPayload = SglFilesPayload.builder()
         .guid(resourceId)
         .build();
-    SGLPayload sglPayload = null;
+    SglPayload sglPayload = null;
 
     if (FILE_RESTORE.getType().equalsIgnoreCase(task.getType())) {
       sglFilesPayload.setPath(((SglGenericTaskRequest) task).getTaskDetails().getPath());
       sglFilesPayload.setFilename(((SglGenericTaskRequest) task).getTaskDetails().getFilename());
 
-      sglPayload = SGLPayload.builder()
+      sglPayload = SglPayload.builder()
           .caller(task.getCorrelationId())
           .displayName(resourceId)
           .priority(task.getPriority())
@@ -91,7 +91,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
       String fullFileName = (path == null) ? "" : path + fileName;
       sglFilesPayload.setFullFileName(fullFileName);
 
-      sglPayload = SGLPayload.builder()
+      sglPayload = SglPayload.builder()
           .caller(task.getCorrelationId())
           .displayName(resourceId)
           .priority(task.getPriority())
@@ -205,7 +205,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     try {
       ObjectMapper om = new ObjectMapper();
 
-      SGLStatusResponse sglStatusResponse = om.readValue(response, SGLStatusResponse.class);
+      SglStatusResponse sglStatusResponse = om.readValue(response, SglStatusResponse.class);
       Job job = sglStatusResponse.getJob();
 
       int exitState = 1;

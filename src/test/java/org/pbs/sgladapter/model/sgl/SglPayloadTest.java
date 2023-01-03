@@ -13,16 +13,16 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SGLPayloadTest {
-  private static final Logger logger = LoggerFactory.getLogger(SGLPayloadTest.class);
+public class SglPayloadTest {
+  private static final Logger logger = LoggerFactory.getLogger(SglPayloadTest.class);
   private static Validator validator;
 
-  private static SGLPayload.SGLPayloadBuilder buildBaseSGLFilePayloadBuilder() {
-    return SGLPayload.builder()
+  private static SglPayload.SglPayloadBuilder buildBaseSGLFilePayloadBuilder() {
+    return SglPayload.builder()
         .caller("123e4567-e89b-12d3-a456-9AC7CBDCEE52")
         .displayName("P123123-001")
         .priority(1)
-        .files(List.of(new SGLFilesPayload("P123123-001",
+        .files(List.of(new SglFilesPayload("P123123-001",
             "\\\\m-isilonsmb\\gpop_dev\\mxf",
             "P123123-001.mxf", "")));
   }
@@ -38,8 +38,8 @@ public class SGLPayloadTest {
    */
   @Test
   public void testValidFileRestoreTaskDetails() {
-    SGLPayload sglPayload = buildBaseSGLFilePayloadBuilder().build();
-    Set<ConstraintViolation<SGLPayload>> violations = validator.validate(sglPayload);
+    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().build();
+    Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(0);
   }
 
@@ -49,9 +49,9 @@ public class SGLPayloadTest {
   @Test
   public void testInvalidCaller() {
     String invalidCaller = "";
-    SGLPayload sglPayload = buildBaseSGLFilePayloadBuilder().caller(invalidCaller).build();
+    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().caller(invalidCaller).build();
 
-    Set<ConstraintViolation<SGLPayload>> violations = validator.validate(sglPayload);
+    Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(1);
     violations.stream().forEach(x -> logger.info(x.getMessage()));
   }
@@ -63,9 +63,9 @@ public class SGLPayloadTest {
   @Test
   public void tesValidEmptyDisplayName() {
     String emptyDisplayName = "";
-    SGLPayload sglPayload = buildBaseSGLFilePayloadBuilder().displayName(emptyDisplayName).build();
+    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().displayName(emptyDisplayName).build();
 
-    Set<ConstraintViolation<SGLPayload>> violations = validator.validate(sglPayload);
+    Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(0);
   }
 
@@ -75,9 +75,9 @@ public class SGLPayloadTest {
   @Test
   public void testInvalidPriority() {
     Integer invalidPriority = 6;
-    SGLPayload sglPayload = buildBaseSGLFilePayloadBuilder().priority(invalidPriority).build();
+    SglPayload sglPayload = buildBaseSGLFilePayloadBuilder().priority(invalidPriority).build();
 
-    Set<ConstraintViolation<SGLPayload>> violations = validator.validate(sglPayload);
+    Set<ConstraintViolation<SglPayload>> violations = validator.validate(sglPayload);
     assertThat(violations).hasSize(1);
     violations.stream().forEach(x -> logger.info(x.getMessage()));
   }
