@@ -20,10 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
-class SGLAdapterControllerTest {
+class SglAdapterControllerTest {
 
   @InjectMocks
-  SGLAdapterController sglAdapterController;
+  SglAdapterController sglAdapterController;
 
   @Mock
   SglAdapterService sglAdapterService;

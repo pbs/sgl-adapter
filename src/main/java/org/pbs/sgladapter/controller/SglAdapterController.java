@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("v1/sgl")
 @Tag(description = "Provides access to Tasks",
     name = "Task Resource")
-public class SGLAdapterController {
+public class SglAdapterController {
 
-  private static final Logger logger = LoggerFactory.getLogger(SGLAdapterController.class);
+  private static final Logger logger = LoggerFactory.getLogger(SglAdapterController.class);
   private SglAdapterService sglAdapterService;
 
-  public SGLAdapterController(SglAdapterService sglAdapterService) {
+  public SglAdapterController(SglAdapterService sglAdapterService) {
     this.sglAdapterService = sglAdapterService;
   }
 
