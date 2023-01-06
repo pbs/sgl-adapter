@@ -1,13 +1,10 @@
 package org.pbs.sgladapter.controller;
 
+import org.pbs.sgladapter.dto.FileArchiveDto;
 import org.pbs.sgladapter.dto.FileRestoreDto;
-import org.pbs.sgladapter.dto.FileRestoreResponseDto;
+import org.pbs.sgladapter.dto.CreateResponseDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Component
@@ -24,22 +21,40 @@ public class Mapper {
                 .build();
     }
 
-    public FileRestoreResponseDto toFileRestoreResponse(SglGenericRequest request) {
-
-        Map<String, String> taskDetails = new HashMap();
-
-        taskDetails.put("path", request.getPath());
-        taskDetails.put("filename", request.getFilename());
-        taskDetails.put("resourceId", request.getResourceId());
-        taskDetails.put("details", request.getDetails());
-
-        return FileRestoreResponseDto.builder()
-                .taskId(request.getTaskId())
-                .correlationId(request.getCorrelationId())
-                .type(request.getType())
-                .priority(request.getPriority())
-                .taskDetails(taskDetails)
-                .status(request.getStatus())
+    public SglGenericRequest toGenericRequest(FileArchiveDto fileArchiveDto) {
+        return SglGenericRequest.builder()
+                .correlationId(fileArchiveDto.getCorrelationId())
+                .type(fileArchiveDto.getType())
+                .priority(fileArchiveDto.getPriority())
+                .path(fileArchiveDto.getTaskDetails().getPath())
+                .filename(fileArchiveDto.getTaskDetails().getFilename())
+                .resourceId(fileArchiveDto.getTaskDetails().getResourceId())
+                .locatorInfo(fileArchiveDto.getTaskDetails().getLocatorInfo())
+                .deleteSource(fileArchiveDto.getTaskDetails().getDeleteSource())
                 .build();
     }
+
+    public CreateResponseDto toFileRestoreResponse(SglGenericRequest genericRequest) {
+        return CreateResponseDto.builder()
+                .taskId(genericRequest.getTaskId())
+                .correlationId(genericRequest.getCorrelationId())
+                .type(genericRequest.getType())
+                .priority(genericRequest.getPriority())
+                .taskDetails(genericRequest.getTaskDetailsForRestore())
+                .status(genericRequest.getStatus())
+                .build();
+    }
+
+    public CreateResponseDto toFileArchiveResponse(SglGenericRequest genericRequest) {
+        return CreateResponseDto.builder()
+                .taskId(genericRequest.getTaskId())
+                .correlationId(genericRequest.getCorrelationId())
+                .type(genericRequest.getType())
+                .priority(genericRequest.getPriority())
+                .taskDetails(genericRequest.getTaskDetailsForArchive())
+                .status(genericRequest.getStatus())
+                .build();
+    }
+
+
 }

@@ -7,9 +7,9 @@ import org.pbs.sgladapter.model.TaskStatusResponse;
 
 public interface SglAdapterService {
 
-  public Task createTask(Task task) throws JsonProcessingException;
+  public SglGenericRequest createRestoreRequest(SglGenericRequest genericRequest) throws JsonProcessingException;
 
-  public SglGenericRequest createRestoreTask(SglGenericRequest task) throws JsonProcessingException;
+  public SglGenericRequest createArchiveRequest(SglGenericRequest genericRequest) throws JsonProcessingException;
 
   public TaskStatusResponse getJobStatus(String tasktype, String taskId);
 }

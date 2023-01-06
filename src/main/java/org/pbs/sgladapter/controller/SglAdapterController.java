@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 
+import org.pbs.sgladapter.dto.FileArchiveDto;
 import org.pbs.sgladapter.dto.FileRestoreDto;
-import org.pbs.sgladapter.dto.FileRestoreResponseDto;
+import org.pbs.sgladapter.dto.CreateResponseDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
-import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.SglAdapterService;
 import org.slf4j.Logger;
@@ -47,31 +47,36 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "400",
                   description = "400 - Bad Request",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
-  public ResponseEntity<FileRestoreResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
+  public ResponseEntity<CreateResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
           throws JsonProcessingException {
     logger.info("Request received {}", fileRestoreDto);
     SglGenericRequest request = mapper.toGenericRequest(fileRestoreDto);
 
-    request = sglAdapterService.createRestoreTask(request);
+    request = sglAdapterService.createRestoreRequest(request);
 
-    // Set TaskId, Status, Details
-
-    FileRestoreResponseDto response = mapper.toFileRestoreResponse(request);
+    // Set Response
+    CreateResponseDto response = mapper.toFileRestoreResponse(request);
 
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
 
-  @PostMapping("/task")
+  @PostMapping("/archive")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "400",
-          description = "400 - Bad Request",
-          content = {@Content(examples = {@ExampleObject(value = "")})})})
-  public ResponseEntity<Task> createTask(@Valid @RequestBody Task task)
-      throws JsonProcessingException {
-    logger.info("Task received {}", task);
-    Task retTask = sglAdapterService.createTask(task);
-    return new ResponseEntity<>(retTask, HttpStatus.OK);
+          @ApiResponse(responseCode = "400",
+                  description = "400 - Bad Request",
+                  content = {@Content(examples = {@ExampleObject(value = "")})})})
+  public ResponseEntity<CreateResponseDto> createArchiveTask(@Valid @RequestBody FileArchiveDto fileArchiveDto)
+          throws JsonProcessingException {
+    logger.info("Request received {}", fileArchiveDto);
+    SglGenericRequest request = mapper.toGenericRequest(fileArchiveDto);
+
+    request = sglAdapterService.createArchiveRequest(request);
+
+    // Set Response
+    CreateResponseDto response = mapper.toFileArchiveResponse(request);
+
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @GetMapping("/task/{taskType}/{taskId}")
