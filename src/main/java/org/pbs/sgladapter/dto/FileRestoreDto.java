@@ -18,8 +18,8 @@ import javax.validation.groups.ConvertGroup;
 @Value
 @Builder
 @Jacksonized
-public class FileRestoreDto extends SglTaskDto{
-/*
+public class FileRestoreDto {
+
     @Pattern(
             regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
             message = "correlationId must be a valid GUID")
@@ -31,8 +31,6 @@ public class FileRestoreDto extends SglTaskDto{
     @Min(value = 1, message = "priority must be greater than 0")
     @Max(value = 100, message = "priority must be less than 101")
     private int priority;
-*/
-
 
     @Valid
     private FileRestoreDetailsRequestDto taskDetails;

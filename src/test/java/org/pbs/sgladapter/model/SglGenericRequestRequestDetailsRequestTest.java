@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SglGenericTaskRequestDetailsRequestTest {
-  private static final Logger logger =
-      LoggerFactory.getLogger(SglGenericTaskRequestDetailsRequestTest.class);
-  private static Validator validator;
+public class SglGenericRequestRequestDetailsRequestTest {
+    private static final Logger logger =
+            LoggerFactory.getLogger(SglGenericRequestRequestDetailsRequestTest.class);
+    private static Validator validator;
 
-  private static SglGenericTaskDetailsRequest.SglGenericTaskDetailsRequestBuilder
-      buildBaseFileRestoreTaskDetailsBuilder() {
-    return SglGenericTaskDetailsRequest.builder()
-        .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
-        .resourceId("P123123-001")
-        .filename("P123123-001.mxf");
+    private static SglGenericTaskDetailsRequest.SglGenericTaskDetailsRequestBuilder
+    buildBaseFileRestoreTaskDetailsBuilder() {
+        return SglGenericTaskDetailsRequest.builder()
+                .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
+                .resourceId("P123123-001")
+                .filename("P123123-001.mxf");
   }
 
   @BeforeAll

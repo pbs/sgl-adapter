@@ -13,10 +13,7 @@ import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.dto.FileRestoreDto;
 import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.exception.ValidationFailedException;
-import org.pbs.sgladapter.model.SglGenericTaskRequest;
-import org.pbs.sgladapter.model.Task;
-import org.pbs.sgladapter.model.TaskStatus;
-import org.pbs.sgladapter.model.TaskStatusResponse;
+import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SglFilesPayload;
 import org.pbs.sgladapter.model.sgl.SglPayload;
@@ -57,19 +54,18 @@ public class SglAdapterServiceImpl implements SglAdapterService {
   }
 
   @Override
-  public SglTaskDto createRestoreTask(SglTaskDto ptask) throws JsonProcessingException {
+  public SglGenericRequest createRestoreTask(SglGenericRequest genericRequest) throws JsonProcessingException {
 
-    FileRestoreDto task = (FileRestoreDto)ptask;
     SglFilesPayload sglFilesPayload = SglFilesPayload.builder()
-            .guid(task.getTaskDetails().getResourceId())
+            .guid(genericRequest.getResourceId())
             .build();
-    sglFilesPayload.setPath(task.getTaskDetails().getPath());
-    sglFilesPayload.setFilename(task.getTaskDetails().getFilename());
+    sglFilesPayload.setPath(genericRequest.getPath());
+    sglFilesPayload.setFilename(genericRequest.getFilename());
 
     SglPayload sglPayload = SglPayload.builder()
-            .caller(task.getCorrelationId())
-            .displayName(task.getTaskDetails().getResourceId())
-            .priority(task.getPriority())
+            .caller(genericRequest.getCorrelationId())
+            .displayName(genericRequest.getResourceId())
+            .priority(genericRequest.getPriority())
             .files(List.of(sglFilesPayload))
             .build();
     ObjectMapper om = new ObjectMapper();
@@ -82,7 +78,9 @@ public class SglAdapterServiceImpl implements SglAdapterService {
 
     String response = sglAdapterClient.restore(request);
 
-    return null;
+    genericRequest = prepareCreateTaskResponseNew(response, genericRequest);
+
+    return genericRequest;
     //return request;
   }
 
@@ -146,7 +144,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
   }
 
 
-  private SglTaskDto prepareCreateTaskResponseNew(String response, SglTaskDto task) {
+  private SglGenericRequest prepareCreateTaskResponseNew(String response, SglGenericRequest genericRequest) {
     if (!StringUtils.isBlank(response)) {
       ObjectMapper jsonMapper = new JsonMapper();
       JsonNode json = null;
@@ -160,17 +158,16 @@ public class SglAdapterServiceImpl implements SglAdapterService {
       String taskId = json.get("RID").asText();
       if (Integer.parseInt(taskId) <= 0) {
         status = TaskStatus.COMPLETED_FAILED;
-        logger.error("Failed to create a new task for " + task.getType()
+        logger.error("Failed to create a new task for " + genericRequest.getType()
                 + " [" + response + "]");
       }
 
-      task.setTaskId(taskId);
-      task.setStatus(status);
-      //((SglGenericTaskRequest) task).getTaskDetails().setDetails(response);
-
+      genericRequest.setTaskId(taskId);
+      genericRequest.setStatus(status);
+      genericRequest.setDetails(response);
     }
 
-    return task;
+    return genericRequest;
   }
 
   private Task prepareCreateTaskResponse(String response, Task task) {

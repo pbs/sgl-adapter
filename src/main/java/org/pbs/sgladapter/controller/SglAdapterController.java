@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 
 import org.pbs.sgladapter.dto.FileRestoreDto;
+import org.pbs.sgladapter.dto.FileRestoreResponseDto;
 import org.pbs.sgladapter.dto.SglTaskDto;
+import org.pbs.sgladapter.model.SglGenericRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.SglAdapterService;
@@ -27,14 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/sgl")
 @Tag(description = "Provides access to Tasks",
-    name = "Task Resource")
+        name = "Task Resource")
 public class SglAdapterController {
 
   private static final Logger logger = LoggerFactory.getLogger(SglAdapterController.class);
   private SglAdapterService sglAdapterService;
 
-  public SglAdapterController(SglAdapterService sglAdapterService) {
+  private Mapper mapper;
+
+  public SglAdapterController(SglAdapterService sglAdapterService,
+                              Mapper mapper) {
     this.sglAdapterService = sglAdapterService;
+    this.mapper = mapper;
   }
 
   @PostMapping("/restore")
@@ -42,11 +48,18 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "400",
                   description = "400 - Bad Request",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
-  public ResponseEntity<SglTaskDto> createRestoreTask(@Valid @RequestBody SglTaskDto task)
+  public ResponseEntity<FileRestoreResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
           throws JsonProcessingException {
-    logger.info("Task received {}", task);
-    SglTaskDto retTask = sglAdapterService.createRestoreTask(task);
-    return new ResponseEntity<>(retTask, HttpStatus.OK);
+    logger.info("Task received {}", fileRestoreDto);
+    SglGenericRequest request = mapper.toGenericRequest(fileRestoreDto);
+
+    request = sglAdapterService.createRestoreTask(request);
+
+    // Set TaskId, Status, Details
+
+    FileRestoreResponseDto response = mapper.toFileRestoreResponse(request);
+
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
 
