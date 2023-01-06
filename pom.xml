@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.pbs.sgladapter</groupId>
   <artifactId>sgl-adapter</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <name>sgl-adapter</name>
   <description>SGL Adapter</description>
   <properties>
