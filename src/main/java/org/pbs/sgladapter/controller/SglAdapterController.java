@@ -10,7 +10,6 @@ import javax.validation.Valid;
 
 import org.pbs.sgladapter.dto.FileRestoreDto;
 import org.pbs.sgladapter.dto.FileRestoreResponseDto;
-import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
@@ -50,7 +49,7 @@ public class SglAdapterController {
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<FileRestoreResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
           throws JsonProcessingException {
-    logger.info("Task received {}", fileRestoreDto);
+    logger.info("Request received {}", fileRestoreDto);
     SglGenericRequest request = mapper.toGenericRequest(fileRestoreDto);
 
     request = sglAdapterService.createRestoreTask(request);

@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
-import org.pbs.sgladapter.dto.FileRestoreDto;
-import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;

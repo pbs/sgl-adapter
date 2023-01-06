@@ -1,8 +1,6 @@
 package org.pbs.sgladapter.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.pbs.sgladapter.dto.FileRestoreDto;
-import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
