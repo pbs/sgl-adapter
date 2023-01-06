@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
@@ -184,6 +186,13 @@ public class SglAdapterServiceImpl implements SglAdapterService {
                 taskStatus = TaskStatus.COMPLETED_SUCCESS;
             } else {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
+
+                // handle error
+                Map<String, String> error = new HashMap();
+                error.put("description", job.getQueuedStateMessage());
+                error.put("detail", response);
+
+                taskStatusResponse.setError(error);
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
