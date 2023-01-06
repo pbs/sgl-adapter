@@ -1,9 +1,12 @@
 package org.pbs.sgladapter.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,17 +16,17 @@ import java.util.Map;
 @SuperBuilder
 public class SglGenericRequest {
 
-  private String correlationId;
+    private String correlationId;
 
-  private String taskId;
+    private String taskId;
 
-  private String type;
+    private String type;
 
-  private int priority;
+    private int priority;
 
-  private TaskStatus status;
+    private TaskStatus status;
 
-  private String path;
+    private String path;
 
     private String filename;
 
@@ -34,6 +37,10 @@ public class SglGenericRequest {
     private Boolean deleteSource;
 
     private String details;
+
+    private LocalDateTime timestamp;
+
+    private Map<String, String> error;
 
     public Map<String, Object> getTaskDetailsForRestore() {
         Map<String, Object> taskDetails = new HashMap();

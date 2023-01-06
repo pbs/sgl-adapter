@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.model.*;
@@ -131,48 +134,63 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     return genericRequest;
   }
 
-  @Override
-  public TaskStatusResponse getJobStatus(String taskType, String taskId) {
-    logger.info("inside of Service.getJobStatus");
+    @Override
+    public SglGenericRequest getJobStatus(String taskId) {
+        logger.info("inside of Service.getJobStatus");
 
-    String response = sglAdapterClient.getTaskStatus(taskId);
+        String response = sglAdapterClient.getTaskStatus(taskId);
 
-    logger.info(response);
+        logger.info(response);
 
-    TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
+        SglGenericRequest taskStatusResponse = convertStatusResponse(response);
 
-    try {
-      ObjectMapper om = new ObjectMapper();
-
-      SglStatusResponse sglStatusResponse = om.readValue(response, SglStatusResponse.class);
-      Job job = sglStatusResponse.getJob();
-
-      int exitState = 1;
-      if (job != null) {
-        exitState = job.getExitState();
-      }
-
-      //The finished status of the job. One of the following values:
-      // 0 (NO_SUCH_JOB)
-      // 1 (LIVE)
-      // 2 (KILLED)
-      // 3 (STOPPED)
-      // 4 (FAILED)
-      // 5 (PASSED)
-      // +6 (PASSED_WITH_WARNING
-      if (exitState == 1) {
-        taskStatus = TaskStatus.IN_PROGRESS;
-      } else if (exitState >= 5) {
-        taskStatus = TaskStatus.COMPLETED_SUCCESS;
-      } else {
-        taskStatus = TaskStatus.COMPLETED_FAILED;
-      }
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+        return taskStatusResponse;
     }
 
-    TaskStatusResponse taskStatusResponse = new TaskStatusResponse(taskStatus);
+    private SglGenericRequest convertStatusResponse(String response) {
+        SglGenericRequest taskStatusResponse = new SglGenericRequest();
 
-    return taskStatusResponse;
-  }
+        TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
+
+        try {
+            ObjectMapper om = new ObjectMapper();
+
+            SglStatusResponse sglStatusResponse = om.readValue(response, SglStatusResponse.class);
+            Job job = sglStatusResponse.getJob();
+
+            taskStatusResponse.setTimestamp(LocalDateTime.now());
+            taskStatusResponse.setDetails(response);
+
+
+            int exitState = 1;
+            if (job != null) {
+                exitState = job.getExitState();
+
+                taskStatusResponse.setCorrelationId(job.getCallingProduct());
+                taskStatusResponse.setResourceId(job.getDisplayName());
+            }
+
+            //The finished status of the job. One of the following values:
+            // 0 (NO_SUCH_JOB)
+            // 1 (LIVE)
+            // 2 (KILLED)
+            // 3 (STOPPED)
+            // 4 (FAILED)
+            // 5 (PASSED)
+            // +6 (PASSED_WITH_WARNING
+            if (exitState == 1) {
+                taskStatus = TaskStatus.IN_PROGRESS;
+            } else if (exitState >= 5) {
+                taskStatus = TaskStatus.COMPLETED_SUCCESS;
+            } else {
+                taskStatus = TaskStatus.COMPLETED_FAILED;
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        taskStatusResponse.setStatus(taskStatus);
+
+        return taskStatusResponse;
+    }
 }

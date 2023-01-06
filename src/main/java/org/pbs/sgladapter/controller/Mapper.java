@@ -3,6 +3,7 @@ package org.pbs.sgladapter.controller;
 import org.pbs.sgladapter.dto.FileArchiveDto;
 import org.pbs.sgladapter.dto.FileRestoreDto;
 import org.pbs.sgladapter.dto.CreateResponseDto;
+import org.pbs.sgladapter.dto.StatusResponseDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,18 @@ public class Mapper {
                 .priority(genericRequest.getPriority())
                 .taskDetails(genericRequest.getTaskDetailsForArchive())
                 .status(genericRequest.getStatus())
+                .build();
+    }
+
+
+    public StatusResponseDto toStatusResponseDto(SglGenericRequest genericRequest) {
+        return StatusResponseDto.builder()
+                .requestorCorrelationId(genericRequest.getCorrelationId())
+                .status(genericRequest.getStatus())
+                .resourceId(genericRequest.getResourceId())
+                .timestamp(genericRequest.getTimestamp())
+                .error(genericRequest.getError())
+                .responseDetails(genericRequest.getDetails())
                 .build();
     }
 

@@ -10,5 +10,5 @@ public interface SglAdapterService {
 
   public SglGenericRequest createArchiveRequest(SglGenericRequest genericRequest) throws JsonProcessingException;
 
-  public TaskStatusResponse getJobStatus(String tasktype, String taskId);
+  public SglGenericRequest getJobStatus(String taskId);
 }

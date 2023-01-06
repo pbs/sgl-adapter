@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.dto.CreateResponseDto;
+import org.pbs.sgladapter.dto.StatusResponseDto;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.service.SglAdapterService;
 import org.springframework.http.HttpStatus;
@@ -54,13 +55,14 @@ class SglAdapterControllerTest {
 
   @Test
   void testGetJobStatusForTaskId() throws Exception {
-    TaskStatusResponse sampleTaskStatusResponse =
-        new TaskStatusResponse(TaskStatus.COMPLETED_SUCCESS);
-    when(sglAdapterService.getJobStatus(any(), any())).thenReturn(sampleTaskStatusResponse);
-    ResponseEntity<TaskStatusResponse> responseEntity =
-        sglAdapterController.getJobStatusForTaskId(any(), any());
+    SglGenericRequest sampleTaskStatusResponse =
+            new SglGenericRequest();
+    sampleTaskStatusResponse.setStatus(TaskStatus.COMPLETED_SUCCESS);
+    when(sglAdapterService.getJobStatus(any())).thenReturn(sampleTaskStatusResponse);
+    ResponseEntity<StatusResponseDto> responseEntity =
+            sglAdapterController.getJobStatusForTaskId(any());
     assertEquals(TaskStatus.COMPLETED_SUCCESS,
-        ((TaskStatusResponse) responseEntity.getBody()).getStatus());
-    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            ((StatusResponseDto) responseEntity.getBody()).getStatus());
+    assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
   }
 }

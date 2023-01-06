@@ -173,7 +173,7 @@ public class SglAdapterServiceImplTest {
           }
           """);
 
-    TaskStatusResponse response = sglAdapterServiceImpl.getJobStatus("FileRestore", taskId);
+    SglGenericRequest response = sglAdapterServiceImpl.getJobStatus(taskId);
 
     assertEquals(response.getStatus(), TaskStatus.COMPLETED_SUCCESS);
 
@@ -217,7 +217,7 @@ public class SglAdapterServiceImplTest {
           }
           """);
 
-    TaskStatusResponse response = sglAdapterServiceImpl.getJobStatus("FileRestore", taskId);
+    SglGenericRequest response = sglAdapterServiceImpl.getJobStatus(taskId);
 
     assertEquals(response.getStatus(), TaskStatus.COMPLETED_FAILED);
 

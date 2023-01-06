@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.pbs.sgladapter.dto.FileArchiveDto;
 import org.pbs.sgladapter.dto.FileRestoreDto;
 import org.pbs.sgladapter.dto.CreateResponseDto;
+import org.pbs.sgladapter.dto.StatusResponseDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.SglAdapterService;
@@ -79,13 +80,13 @@ public class SglAdapterController {
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
-  @GetMapping("/task/{taskType}/{taskId}")
-  public ResponseEntity<TaskStatusResponse> getJobStatusForTaskId(@PathVariable String taskType,
-                                                                  @PathVariable String taskId) {
-    logger.info("Getting job status for taskId:" + taskType + " - " + taskId);
-    TaskStatusResponse taskStatusResponse = sglAdapterService.getJobStatus(taskType, taskId);
+  @GetMapping("/status/{taskId}")
+  public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String taskId) {
+    logger.info("Getting job status for taskId:" + " - " + taskId);
+    SglGenericRequest taskStatusResponse = sglAdapterService.getJobStatus(taskId);
     logger.info("Got taskStatusResponse:" + taskStatusResponse);
-    return new ResponseEntity<>(taskStatusResponse, HttpStatus.OK);
+    StatusResponseDto response = mapper.toStatusResponseDto(taskStatusResponse);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
 }
