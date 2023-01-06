@@ -1,19 +1,13 @@
 package org.pbs.sgladapter.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
-import org.pbs.sgladapter.model.SglGenericTaskDetailsRequest;
-import org.pbs.sgladapter.model.TaskStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.groups.ConvertGroup;
 
 @Value
 @Builder

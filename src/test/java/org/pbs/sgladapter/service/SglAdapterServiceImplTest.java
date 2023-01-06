@@ -16,12 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.ValidationFailedException;
-import org.pbs.sgladapter.model.SglGenericTaskDetailsRequest;
-import org.pbs.sgladapter.model.SglGenericTaskRequest;
-import org.pbs.sgladapter.model.Task;
-import org.pbs.sgladapter.model.TaskStatus;
-import org.pbs.sgladapter.model.TaskStatusResponse;
-import org.pbs.sgladapter.model.TaskType;
+import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,42 +32,38 @@ public class SglAdapterServiceImplTest {
   @Mock
   private SglAdapterClient mockSglAdapterClient;
 
-  private static SglGenericTaskRequest.SglGenericTaskRequestBuilder
-      buildBaseSglGenericTaskRequestBuilder(
-      TaskType type) {
-
-    // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskDetailsRequest taskInputDetails =
-        SglGenericTaskDetailsRequest.builder().path("\\\\m-isilonsmb\\gpop_dev\\mxf")
-            .resourceId("P123123-001").filename("P123123-001.mxf").build();
-
-    return SglGenericTaskRequest.builder().type(type.getType())
-        .correlationId("123e4567-e89h-12d3-a456-9AC7CBDCEE52")
-        .priority(2).taskDetails(taskInputDetails);
+  private static SglGenericRequest.SglGenericRequestBuilder buildBaseSglGenericRequestBuilder() {
+    return SglGenericRequest.builder()
+            .correlationId("123e4567-e89h-12d3-a456-9AC7CBDCEE52")
+            .priority(2)
+            .path("\\\\m-isilonsmb\\gpop_dev\\mxf")
+            .resourceId("P123123-001")
+            .filename("P123123-001.mxf");
   }
+
 
   @Test
   public void testCreateTaskSuccess() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
-        .thenReturn("""
-          {
-            "Files": {},
-            "totalEntriesProcessed": 0,
-            "Success": true,
-            "Errors": [],
-            "RID": 1336,
-            "Message": "Restoring 1 full file",
-            "Lid": "26102022-af331005ae2a44a9ab19f8ed401ffee8"
-          }
-          """);
+            .thenReturn("""
+                    {
+                      "Files": {},
+                      "totalEntriesProcessed": 0,
+                      "Success": true,
+                      "Errors": [],
+                      "RID": 1336,
+                      "Message": "Restoring 1 full file",
+                      "Lid": "26102022-af331005ae2a44a9ab19f8ed401ffee8"
+                    }
+                    """);
 
     try {
-      Task response = sglAdapterServiceImpl.createTask(inputTask);
+      inputTask = sglAdapterServiceImpl.createRestoreRequest(inputTask);
 
-      assertEquals(response.getTaskId(), "1336");
+      assertEquals(inputTask.getTaskId(), "1336");
 
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -83,9 +74,9 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskSuccessArchive() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_ARCHIVE).build();
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
 
-    inputTask.getTaskDetails().setLocatorInfo("lab_mxf_D");
+    inputTask.setLocatorInfo("lab_mxf_D");
 
     when(mockSglAdapterClient.archive(any(String.class)))
         .thenReturn("""
@@ -102,9 +93,9 @@ public class SglAdapterServiceImplTest {
           """);
 
     try {
-      Task response = sglAdapterServiceImpl.createTask(inputTask);
+      inputTask = sglAdapterServiceImpl.createArchiveRequest(inputTask);
 
-      assertEquals(response.getTaskId(), "1417");
+      assertEquals(inputTask.getTaskId(), "1417");
 
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -115,7 +106,7 @@ public class SglAdapterServiceImplTest {
   @Test
   public void testCreateTaskFailed() {
     // Create a Task to be passed into the TaskService's createTask method.
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
         .thenReturn("""
@@ -133,9 +124,9 @@ public class SglAdapterServiceImplTest {
           """);
 
     try {
-      Task response = sglAdapterServiceImpl.createTask(inputTask);
+      inputTask = sglAdapterServiceImpl.createRestoreRequest(inputTask);
 
-      assertEquals(response.getTaskId(), "0");
+      assertEquals(inputTask.getTaskId(), "0");
 
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -232,70 +223,6 @@ public class SglAdapterServiceImplTest {
 
   }
 
-  @Test
-  public void testValidateDataMissingCorrelationId() {
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
 
-    // remove inputTask
-    inputTask.setCorrelationId("");
-
-    try {
-      sglAdapterServiceImpl.createTask(inputTask);
-    } catch (JsonProcessingException e) {
-      assertNull(e);
-    } catch (ValidationFailedException e) {
-      assertNotNull(e);
-      logger.info(e.getMessage());
-      assertEquals("Invalid value for: CorrelationId", e.getMessage());
-    }
-  }
-
-
-  @Test
-  public void testValidateDataForFileRestore() {
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_RESTORE).build();
-
-    // remove inputTask
-    inputTask.setCorrelationId("");
-    inputTask.getTaskDetails().setResourceId(null);
-    inputTask.getTaskDetails().setPath("  ");
-    inputTask.getTaskDetails().setFilename("");
-
-
-    try {
-      sglAdapterServiceImpl.createTask(inputTask);
-    } catch (JsonProcessingException e) {
-      assertNull(e);
-    } catch (ValidationFailedException e) {
-      assertNotNull(e);
-      logger.info(e.getMessage());
-      assertEquals("Invalid value for: CorrelationId, ResourceId, Path, Filename", e.getMessage());
-    }
-  }
-
-
-  @Test
-  public void testValidateDataForFileArchive() {
-    SglGenericTaskRequest inputTask = buildBaseSglGenericTaskRequestBuilder(FILE_ARCHIVE).build();
-
-    // remove inputTask
-    inputTask.setCorrelationId("");
-    inputTask.getTaskDetails().setResourceId("");
-    inputTask.getTaskDetails().setPath(null);
-    inputTask.getTaskDetails().setFilename("abc.");
-    inputTask.getTaskDetails().setLocatorInfo("   ");
-
-
-    try {
-      sglAdapterServiceImpl.createTask(inputTask);
-    } catch (JsonProcessingException e) {
-      assertNull(e);
-    } catch (ValidationFailedException e) {
-      assertNotNull(e);
-      logger.info(e.getMessage());
-      assertEquals("Invalid value for: CorrelationId, ResourceId, Path, Filename, LocatorInfo",
-          e.getMessage());
-    }
-  }
 
 }
