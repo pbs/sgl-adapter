@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
+
+import org.pbs.sgladapter.dto.FileRestoreDto;
+import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.model.Task;
 import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.SglAdapterService;
@@ -33,6 +36,19 @@ public class SglAdapterController {
   public SglAdapterController(SglAdapterService sglAdapterService) {
     this.sglAdapterService = sglAdapterService;
   }
+
+  @PostMapping("/restore")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "400",
+                  description = "400 - Bad Request",
+                  content = {@Content(examples = {@ExampleObject(value = "")})})})
+  public ResponseEntity<SglTaskDto> createRestoreTask(@Valid @RequestBody SglTaskDto task)
+          throws JsonProcessingException {
+    logger.info("Task received {}", task);
+    SglTaskDto retTask = sglAdapterService.createRestoreTask(task);
+    return new ResponseEntity<>(retTask, HttpStatus.OK);
+  }
+
 
   @PostMapping("/task")
   @ApiResponses(value = {

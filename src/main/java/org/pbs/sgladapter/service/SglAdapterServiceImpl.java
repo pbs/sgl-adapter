@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
+import org.pbs.sgladapter.dto.FileRestoreDto;
+import org.pbs.sgladapter.dto.SglTaskDto;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.SglGenericTaskRequest;
 import org.pbs.sgladapter.model.Task;
@@ -52,6 +54,36 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     task = prepareCreateTaskResponse(response, task);
 
     return task;
+  }
+
+  @Override
+  public SglTaskDto createRestoreTask(SglTaskDto ptask) throws JsonProcessingException {
+
+    FileRestoreDto task = (FileRestoreDto)ptask;
+    SglFilesPayload sglFilesPayload = SglFilesPayload.builder()
+            .guid(task.getTaskDetails().getResourceId())
+            .build();
+    sglFilesPayload.setPath(task.getTaskDetails().getPath());
+    sglFilesPayload.setFilename(task.getTaskDetails().getFilename());
+
+    SglPayload sglPayload = SglPayload.builder()
+            .caller(task.getCorrelationId())
+            .displayName(task.getTaskDetails().getResourceId())
+            .priority(task.getPriority())
+            .files(List.of(sglFilesPayload))
+            .build();
+    ObjectMapper om = new ObjectMapper();
+    String request = null;
+    try {
+      request = om.writeValueAsString(sglPayload);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+
+    String response = sglAdapterClient.restore(request);
+
+    return null;
+    //return request;
   }
 
   private String prepareCreateTaskRequest(Task task) throws ValidationFailedException {
@@ -111,6 +143,34 @@ public class SglAdapterServiceImpl implements SglAdapterService {
 
     return request;
 
+  }
+
+
+  private SglTaskDto prepareCreateTaskResponseNew(String response, SglTaskDto task) {
+    if (!StringUtils.isBlank(response)) {
+      ObjectMapper jsonMapper = new JsonMapper();
+      JsonNode json = null;
+      TaskStatus status = TaskStatus.COMPLETED_SUCCESS;
+      try {
+        json = jsonMapper.readTree(response);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+
+      String taskId = json.get("RID").asText();
+      if (Integer.parseInt(taskId) <= 0) {
+        status = TaskStatus.COMPLETED_FAILED;
+        logger.error("Failed to create a new task for " + task.getType()
+                + " [" + response + "]");
+      }
+
+      task.setTaskId(taskId);
+      task.setStatus(status);
+      //((SglGenericTaskRequest) task).getTaskDetails().setDetails(response);
+
+    }
+
+    return task;
   }
 
   private Task prepareCreateTaskResponse(String response, Task task) {
