@@ -19,7 +19,7 @@ public class FileArchiveDetailsRequestDto {
   private String path;
 
   @NotBlank(message = "filename must not be empty")
-  @Pattern.List({@Pattern(regexp = "[^\\s]+(\\.(?i)[^\\s]+$)")})
+  @Pattern(regexp = "[^\\s]+(\\.(?i)[^\\s]+$)")
   private String filename;
 
   @NotBlank(message = "resourceId must not be empty")

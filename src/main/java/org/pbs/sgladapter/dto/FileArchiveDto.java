@@ -19,7 +19,7 @@ public class FileArchiveDto {
             message = "correlationId must be a valid GUID")
     private String correlationId;
 
-    @Pattern.List({@Pattern(regexp = "file_archive")})
+    @Pattern(regexp = "file_archive", message = "type must be file_archive")
     private String type;
 
     @Min(value = 1, message = "priority must be greater than 0")

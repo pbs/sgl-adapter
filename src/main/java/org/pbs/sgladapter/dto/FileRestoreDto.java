@@ -19,7 +19,7 @@ public class FileRestoreDto {
             message = "correlationId must be a valid GUID")
     private String correlationId;
 
-    @Pattern.List({@Pattern(regexp = "file_restore")})
+    @Pattern(regexp = "file_restore", message = "type must be file_restore")
     private String type;
 
     @Min(value = 1, message = "priority must be greater than 0")
