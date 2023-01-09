@@ -63,7 +63,7 @@ public class Mapper {
                 .requestorCorrelationId(genericRequest.getCorrelationId())
                 .status(genericRequest.getStatus())
                 .resourceId(genericRequest.getResourceId())
-                .timestamp(genericRequest.getTimestamp())
+                .timestamp(genericRequest.getTimestamp().toString())
                 .error(genericRequest.getError())
                 .responseDetails(genericRequest.getDetails())
                 .build();

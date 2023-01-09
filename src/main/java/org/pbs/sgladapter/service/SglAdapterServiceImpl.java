@@ -160,7 +160,6 @@ public class SglAdapterServiceImpl implements SglAdapterService {
             SglStatusResponse sglStatusResponse = om.readValue(response, SglStatusResponse.class);
             Job job = sglStatusResponse.getJob();
 
-            taskStatusResponse.setTimestamp(LocalDateTime.now());
             taskStatusResponse.setDetails(response);
 
 
@@ -188,11 +187,8 @@ public class SglAdapterServiceImpl implements SglAdapterService {
                 taskStatus = TaskStatus.COMPLETED_FAILED;
 
                 // handle error
-                Map<String, String> error = new HashMap();
-                error.put("description", job.getQueuedStateMessage());
-                error.put("detail", response);
-
-                taskStatusResponse.setError(error);
+                taskStatusResponse.getError().put("description", job.getQueuedStateMessage());
+                taskStatusResponse.getError().put("detail", response);
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

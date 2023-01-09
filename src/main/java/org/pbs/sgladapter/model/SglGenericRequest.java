@@ -2,15 +2,14 @@ package org.pbs.sgladapter.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @SuperBuilder
@@ -38,9 +37,16 @@ public class SglGenericRequest {
 
     private String details;
 
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     private Map<String, String> error;
+
+    public SglGenericRequest() {
+        timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+        error = new HashMap<>();
+        error.put("description", "");
+        error.put("detail", "");
+    }
 
     public Map<String, Object> getTaskDetailsForRestore() {
         Map<String, Object> taskDetails = new HashMap();
@@ -81,5 +87,9 @@ public class SglGenericRequest {
         fullFileName = (path == null) ? "" : path + this.getFilename();
         return fullFileName;
     }
+
+//    public String getFormattedTimestamp() {
+//        private static final String PATTERN_FORMAT = "MM/dd/yyyyT";
+//    }
 
 }
