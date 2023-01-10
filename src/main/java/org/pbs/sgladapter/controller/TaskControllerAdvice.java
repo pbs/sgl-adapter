@@ -3,6 +3,7 @@ package org.pbs.sgladapter.controller;
 
 import org.pbs.sgladapter.exception.BadRequestException;
 import org.pbs.sgladapter.exception.ErrorResponse;
+import org.pbs.sgladapter.exception.JobNotFoundException;
 import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +57,13 @@ public class TaskControllerAdvice {
     ErrorResponse exceptionResponse =
             new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
+  }
+
+  @ExceptionHandler(JobNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public final ResponseEntity<Object> jobNotFoundHandler(Exception ex, WebRequest request) {
+    ErrorResponse exceptionResponse =
+            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
   }
 }

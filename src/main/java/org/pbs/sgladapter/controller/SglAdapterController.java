@@ -91,6 +91,15 @@ public class SglAdapterController {
   }
 
   @GetMapping("/status/{taskId}")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200",
+                  description = "${api.response-codes.ok.desc}"),
+          @ApiResponse(responseCode = "404",
+                  description = "${api.response-codes.notFound.desc}",
+                  content = {@Content(examples = {@ExampleObject(value = "")})}),
+          @ApiResponse(responseCode = "500",
+                  description = "${api.response-codes.internalServerError.desc}",
+                  content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String taskId) {
     logger.info("Getting job status for taskId:" + " - " + taskId);
     SglGenericRequest taskStatusResponse = sglAdapterService.getJobStatus(taskId);

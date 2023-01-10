@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.BadRequestException;
+import org.pbs.sgladapter.exception.JobNotFoundException;
 import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
@@ -147,12 +148,17 @@ public class SglAdapterServiceImpl implements SglAdapterService {
 
         logger.info(response);
 
-        SglGenericRequest taskStatusResponse = convertStatusResponse(response);
+        SglGenericRequest taskStatusResponse = convertStatusResponse(response, taskId);
 
         return taskStatusResponse;
     }
 
-    private SglGenericRequest convertStatusResponse(String response) {
+    private SglGenericRequest convertStatusResponse(String response, String taskId) {
+
+        if (StringUtils.isBlank(response)) {
+            throw new ServiceUnavailableException();
+        }
+
         SglGenericRequest taskStatusResponse = new SglGenericRequest();
 
         TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
@@ -182,7 +188,9 @@ public class SglAdapterServiceImpl implements SglAdapterService {
             // 4 (FAILED)
             // 5 (PASSED)
             // +6 (PASSED_WITH_WARNING
-            if (exitState == 1) {
+            if (exitState == 0) {
+                throw new JobNotFoundException(taskId);
+            } else if (exitState == 1) {
                 taskStatus = TaskStatus.IN_PROGRESS;
             } else if (exitState >= 5) {
                 taskStatus = TaskStatus.COMPLETED_SUCCESS;
