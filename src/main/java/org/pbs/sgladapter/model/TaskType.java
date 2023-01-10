@@ -2,8 +2,8 @@ package org.pbs.sgladapter.model;
 
 public enum TaskType {
 
-  FILE_RESTORE("FileRestore"),
-  FILE_ARCHIVE("FileArchive");
+  FILE_RESTORE("file_restore"),
+  FILE_ARCHIVE("file_archive");
 
   private final String type;
 

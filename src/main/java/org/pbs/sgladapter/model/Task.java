@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileRestore"),
-    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "FileArchive")
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "file_restore"),
+    @JsonSubTypes.Type(value = SglGenericTaskRequest.class, name = "file_archive")
 })
 public abstract class Task {
   private static final Logger logger = LoggerFactory.getLogger(Task.class);
@@ -39,8 +39,7 @@ public abstract class Task {
   @Hidden
   private String taskId;
 
-  @Pattern.List({@Pattern(regexp = "FileRestore|FileArchive")})
-  //@Pattern.List({@Pattern(regexp = "FileRestore")})
+  @Pattern.List({@Pattern(regexp = "file_restore|file_archive")})
   private String type;
 
   @Min(value = 1, message = "priority must be greater than 0")
