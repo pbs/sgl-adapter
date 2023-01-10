@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
-import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +17,6 @@ import org.pbs.sgladapter.adapter.SglAdapterClient;
 import org.pbs.sgladapter.exception.BadRequestException;
 import org.pbs.sgladapter.exception.JobNotFoundException;
 import org.pbs.sgladapter.exception.ServiceUnavailableException;
-import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
