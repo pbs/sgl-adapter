@@ -45,8 +45,13 @@ public class SglAdapterController {
 
   @PostMapping("/restore")
   @ApiResponses(value = {
+          @ApiResponse(responseCode = "201",
+                  description = "${api.response-codes.created.desc}"),
           @ApiResponse(responseCode = "400",
-                  description = "400 - Bad Request",
+                  description = "${api.response-codes.badRequest.desc}",
+                  content = {@Content(examples = {@ExampleObject(value = "")})}),
+          @ApiResponse(responseCode = "500",
+                  description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
           throws JsonProcessingException {
@@ -64,8 +69,13 @@ public class SglAdapterController {
 
   @PostMapping("/archive")
   @ApiResponses(value = {
+          @ApiResponse(responseCode = "201",
+                  description = "${api.response-codes.created.desc}"),
           @ApiResponse(responseCode = "400",
-                  description = "400 - Bad Request",
+                  description = "${api.response-codes.badRequest.desc}",
+                  content = {@Content(examples = {@ExampleObject(value = "")})}),
+          @ApiResponse(responseCode = "500",
+                  description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createArchiveTask(@Valid @RequestBody FileArchiveDto fileArchiveDto)
           throws JsonProcessingException {

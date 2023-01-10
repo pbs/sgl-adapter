@@ -1,11 +1,9 @@
 package org.pbs.sgladapter.controller;
 
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import org.pbs.sgladapter.exception.BadRequestException;
 import org.pbs.sgladapter.exception.ErrorResponse;
-import org.pbs.sgladapter.exception.ValidationFailedException;
+import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice()
 public class TaskControllerAdvice {
@@ -39,11 +41,20 @@ public class TaskControllerAdvice {
     return errors;
   }
 
-  @ExceptionHandler(ValidationFailedException.class)
+  @ExceptionHandler(BadRequestException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public final ResponseEntity<Object> taskAlreadyExistsHandler(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> badRequestHandler(Exception ex, WebRequest request) {
     ErrorResponse exceptionResponse =
-        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+  }
+
+
+  @ExceptionHandler(ServiceUnavailableException.class)
+  @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+  public final ResponseEntity<Object> serviceUnavailableHandler(Exception ex, WebRequest request) {
+    ErrorResponse exceptionResponse =
+            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
   }
 }

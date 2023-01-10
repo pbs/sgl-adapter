@@ -12,6 +12,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
+import org.pbs.sgladapter.exception.BadRequestException;
+import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.pbs.sgladapter.model.*;
 import org.pbs.sgladapter.model.sgl.Job;
 import org.pbs.sgladapter.model.sgl.SglFilesPayload;
@@ -111,27 +113,28 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     }
 
     private SglGenericRequest prepareCreateTaskResponse(String response, SglGenericRequest genericRequest) {
+
         if (!StringUtils.isBlank(response)) {
             ObjectMapper jsonMapper = new JsonMapper();
             JsonNode json = null;
-            TaskStatus status = TaskStatus.COMPLETED_SUCCESS;
             try {
                 json = jsonMapper.readTree(response);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
 
-      String taskId = json.get("RID").asText();
-      if (Integer.parseInt(taskId) <= 0) {
-        status = TaskStatus.COMPLETED_FAILED;
-        logger.error("Failed to create a new task for " + genericRequest.getType()
-                + " [" + response + "]");
-      }
+            String taskId = json.get("RID").asText();
+            if (Integer.parseInt(taskId) <= 0) {
+                throw new BadRequestException(response);
+            }
 
-      genericRequest.setTaskId(taskId);
-      genericRequest.setStatus(status);
-      genericRequest.setDetails(response);
-    }
+            genericRequest.setTaskId(taskId);
+            genericRequest.setStatus(TaskStatus.COMPLETED_SUCCESS);
+            genericRequest.setDetails(response);
+        } else {
+            // empty response
+            throw new ServiceUnavailableException();
+        }
 
     return genericRequest;
   }
