@@ -23,7 +23,7 @@ public class TaskTest {
   }
 
   private static Task.TaskBuilder buildBaseTaskBuilder() {
-    return MockTask.builder().type("FileRestore")
+    return MockTask.builder().type(TaskType.FILE_RESTORE.getType())
         .correlationId("123e4567-e89b-12d3-a456-9AC7CBDCEE52").priority(2);
   }
 
@@ -38,7 +38,7 @@ public class TaskTest {
    */
   @Test
   public void testValidTaskType() {
-    String validType = "FileRestore";
+    String validType = TaskType.FILE_RESTORE.getType();
     Task taskInputTask1 = buildBaseTaskBuilder().type(validType).build();
 
     Set<ConstraintViolation<Task>> violations = validator.validate(taskInputTask1);
