@@ -9,12 +9,16 @@ import static org.pbs.sgladapter.model.TaskType.FILE_ARCHIVE;
 import static org.pbs.sgladapter.model.TaskType.FILE_RESTORE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
+import org.pbs.sgladapter.exception.BadRequestException;
+import org.pbs.sgladapter.exception.JobNotFoundException;
+import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.pbs.sgladapter.exception.ValidationFailedException;
 import org.pbs.sgladapter.model.*;
 import org.slf4j.Logger;
@@ -104,34 +108,80 @@ public class SglAdapterServiceImplTest {
   }
 
   @Test
-  public void testCreateTaskFailed() {
+  public void testCreateRestoreFailed() {
     // Create a Task to be passed into the TaskService's createTask method.
     SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
 
     when(mockSglAdapterClient.restore(any(String.class)))
-        .thenReturn("""
-          {
-            "Files": {},
-            "totalEntriesProcessed": 0,
-            "Success": false,
-            "Errors": [
-              "The request was rejected."
-            ],
-            "RID": 0,
-            "Message": "The request was rejected.",
-            "Lid": "15122022-b14be94ee6a3498490f16ee3f46209db"
-          }
-          """);
+            .thenReturn("""
+                    {
+                      "Files": {},
+                      "totalEntriesProcessed": 0,
+                      "Success": false,
+                      "Errors": [
+                        "The request was rejected."
+                      ],
+                      "RID": 0,
+                      "Message": "The request was rejected.",
+                      "Lid": "15122022-b14be94ee6a3498490f16ee3f46209db"
+                    }
+                    """);
 
-    try {
-      inputTask = sglAdapterServiceImpl.createRestoreRequest(inputTask);
+    Assertions.assertThrows(BadRequestException.class, () -> {
+      sglAdapterServiceImpl.createRestoreRequest(inputTask);
+    });
+  }
 
-      assertEquals(inputTask.getTaskId(), "0");
+  @Test
+  public void testCreateRestoreEmptyResponse() {
+    // Create a Task to be passed into the TaskService's createTask method.
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
 
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    when(mockSglAdapterClient.restore(any(String.class)))
+            .thenReturn("");
 
+    Assertions.assertThrows(ServiceUnavailableException.class, () -> {
+      sglAdapterServiceImpl.createRestoreRequest(inputTask);
+    });
+  }
+
+
+  @Test
+  public void testCreateArchiveFailed() {
+    // Create a Task to be passed into the TaskService's createTask method.
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
+
+    when(mockSglAdapterClient.archive(any(String.class)))
+            .thenReturn("""
+                    {
+                      "Files": {},
+                      "totalEntriesProcessed": 0,
+                      "Success": false,
+                      "Errors": [
+                        "The request was rejected."
+                      ],
+                      "RID": 0,
+                      "Message": "The request was rejected.",
+                      "Lid": "15122022-b14be94ee6a3498490f16ee3f46209db"
+                    }
+                    """);
+
+    Assertions.assertThrows(BadRequestException.class, () -> {
+      sglAdapterServiceImpl.createArchiveRequest(inputTask);
+    });
+  }
+
+  @Test
+  public void testCreateArchiveEmptyResponse() {
+    // Create a Task to be passed into the TaskService's createTask method.
+    SglGenericRequest inputTask = buildBaseSglGenericRequestBuilder().build();
+
+    when(mockSglAdapterClient.archive(any(String.class)))
+            .thenReturn("");
+
+    Assertions.assertThrows(ServiceUnavailableException.class, () -> {
+      sglAdapterServiceImpl.createArchiveRequest(inputTask);
+    });
   }
 
 
@@ -139,10 +189,10 @@ public class SglAdapterServiceImplTest {
   public void testGetTaskSuccess() {
     String taskId = "1377";
     when(mockSglAdapterClient.getTaskStatus(any(String.class)))
-        .thenReturn("""
-          {
-            "Job": {
-              "RID": 1377,
+            .thenReturn("""
+                    {
+                      "Job": {
+                        "RID": 1377,
               "RunState": 1,
               "ExitState": 5,
               "ExitStateMessage": "PASSED",
@@ -207,22 +257,30 @@ public class SglAdapterServiceImplTest {
               "Size": 0,
               "BytesTransferred": 0,
               "BytesVerified": 0,
-              "WillVerify": false,
-              "Percent": 0
-            },
-            "Success": false,
-            "Errors": [],
-            "Message": null,
-            "Lid": "15122022-5524170bbf1d4df780b31d7cf6806611"
-          }
-          """);
+                    "WillVerify": false,
+                    "Percent": 0
+                  },
+                  "Success": false,
+                  "Errors": [],
+                  "Message": null,
+                  "Lid": "15122022-5524170bbf1d4df780b31d7cf6806611"
+                }
+                """);
 
-    SglGenericRequest response = sglAdapterServiceImpl.getJobStatus(taskId);
-
-    assertEquals(response.getStatus(), TaskStatus.COMPLETED_FAILED);
-
+    Assertions.assertThrows(JobNotFoundException.class, () -> {
+      sglAdapterServiceImpl.getJobStatus(taskId);
+    });
   }
 
 
+  public void testGetTaskEmptyResponse() {
+    String taskId = "13770";
+    when(mockSglAdapterClient.getTaskStatus(any(String.class)))
+            .thenReturn("");
+
+    Assertions.assertThrows(ServiceUnavailableException.class, () -> {
+      sglAdapterServiceImpl.getJobStatus(taskId);
+    });
+  }
 
 }
