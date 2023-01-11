@@ -45,10 +45,10 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "201",
                   description = "${api.response-codes.created.desc}"),
           @ApiResponse(responseCode = "400",
-                  description = "${api.response-codes.badRequest.desc}",
+                  description = "${api.response-codes.bad-request.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
           @ApiResponse(responseCode = "503",
-                  description = "${api.response-codes.internalServerError.desc}",
+                  description = "${api.response-codes.internal-server-error.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
           throws JsonProcessingException {
@@ -71,10 +71,10 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "201",
                   description = "${api.response-codes.created.desc}"),
           @ApiResponse(responseCode = "400",
-                  description = "${api.response-codes.badRequest.desc}",
+                  description = "${api.response-codes.bad-request.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
           @ApiResponse(responseCode = "503",
-                  description = "${api.response-codes.internalServerError.desc}",
+                  description = "${api.response-codes.internal-server-error.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createArchiveTask(@Valid @RequestBody FileArchiveDto fileArchiveDto)
           throws JsonProcessingException {
@@ -96,10 +96,10 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "200",
                   description = "${api.response-codes.ok.desc}"),
           @ApiResponse(responseCode = "404",
-                  description = "${api.response-codes.notFound.desc}",
+                  description = "${api.response-codes.not-found.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
           @ApiResponse(responseCode = "503",
-                  description = "${api.response-codes.internalServerError.desc}",
+                  description = "${api.response-codes.internal-server-error.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String jobId) {
     logger.info("Getting job status for taskId:" + " - " + jobId);
