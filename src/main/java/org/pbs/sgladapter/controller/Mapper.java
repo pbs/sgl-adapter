@@ -31,6 +31,7 @@ public class Mapper {
         .resourceId(fileArchiveDto.getTaskDetails().getResourceId())
         .locatorInfo(fileArchiveDto.getTaskDetails().getLocatorInfo())
         .requestor(fileArchiveDto.getTaskDetails().getRequestor())
+        .deleteSource(fileArchiveDto.getTaskDetails().getDeleteSource())
         .build();
   }
 

@@ -34,6 +34,8 @@ public class SglGenericRequest {
 
   private String requestor;
 
+  private Boolean deleteSource;
+
   private String details;
 
   private Instant timestamp;
@@ -68,6 +70,7 @@ public class SglGenericRequest {
     taskDetails.put("filename", this.getFilename());
     taskDetails.put("resourceId", this.getResourceId());
     taskDetails.put("locatorInfo", this.getLocatorInfo());
+    taskDetails.put("deleteSource", this.getDeleteSource());
     taskDetails.put("details", this.getDetails());
 
     return taskDetails;
@@ -75,7 +78,7 @@ public class SglGenericRequest {
 
   // Appends filename to the path
   public String getFullName() {
-    String fullFileName = "";
+    String fullFileName;
 
     String path = this.getPath();
     if (!StringUtils.isBlank(path)) {

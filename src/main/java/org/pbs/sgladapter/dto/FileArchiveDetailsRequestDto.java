@@ -28,4 +28,6 @@ public class FileArchiveDetailsRequestDto {
   @NotBlank(message = "locatorInfo must not be empty")
   private String locatorInfo;
 
+  private Boolean deleteSource;
+
 }
