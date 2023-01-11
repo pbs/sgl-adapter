@@ -1,6 +1,7 @@
 package org.pbs.sgladapter.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,6 +45,8 @@ public class SglAdapterController {
   }
 
   @PostMapping("/restore")
+  @Operation(summary = "Submit a file restore request",
+          description = "Provides capability to submit a file restore request to SGL")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "201",
                   description = "${api.response-codes.created.desc}"),
@@ -68,6 +71,8 @@ public class SglAdapterController {
 
 
   @PostMapping("/archive")
+  @Operation(summary = "Submit a file archive request",
+          description = "Provides capability to submit a file archive request to SGL")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "201",
                   description = "${api.response-codes.created.desc}"),
@@ -90,7 +95,9 @@ public class SglAdapterController {
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
-  @GetMapping("/status/{taskId}")
+  @GetMapping("/status/{jobId}")
+  @Operation(summary = "Checks file restore/archive job status for a given jobId",
+          description = "Provides capability to check SGL job status to restore/archive")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200",
                   description = "${api.response-codes.ok.desc}"),
@@ -100,9 +107,9 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "500",
                   description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
-  public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String taskId) {
-    logger.info("Getting job status for taskId:" + " - " + taskId);
-    SglGenericRequest taskStatusResponse = sglAdapterService.getJobStatus(taskId);
+  public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String jobId) {
+    logger.info("Getting job status for taskId:" + " - " + jobId);
+    SglGenericRequest taskStatusResponse = sglAdapterService.getJobStatus(jobId);
     logger.info("Got taskStatusResponse:" + taskStatusResponse);
     StatusResponseDto response = mapper.toStatusResponseDto(taskStatusResponse);
     return new ResponseEntity<>(response, HttpStatus.CREATED);

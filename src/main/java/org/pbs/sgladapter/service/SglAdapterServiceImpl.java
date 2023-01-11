@@ -27,26 +27,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class SglAdapterServiceImpl implements SglAdapterService {
 
-  private static final Logger logger
-      = LoggerFactory.getLogger(SglAdapterServiceImpl.class);
+    private static final Logger logger
+            = LoggerFactory.getLogger(SglAdapterServiceImpl.class);
 
-  private SglAdapterClient sglAdapterClient;
+    private SglAdapterClient sglAdapterClient;
 
-  public SglAdapterServiceImpl(SglAdapterClient sglAdapterClient) {
-    this.sglAdapterClient = sglAdapterClient;
-  }
+    public SglAdapterServiceImpl(SglAdapterClient sglAdapterClient) {
+        this.sglAdapterClient = sglAdapterClient;
+    }
 
-  @Override
-  public SglGenericRequest createRestoreRequest(SglGenericRequest genericRequest) throws JsonProcessingException {
+    @Override
+    public SglGenericRequest createRestoreRequest(SglGenericRequest genericRequest) throws JsonProcessingException {
 
-      String request = prepareCreateRequestForRestore(genericRequest);
+        String request = prepareCreateRequestForRestore(genericRequest);
 
-      String response = sglAdapterClient.restore(request);
+        String response = sglAdapterClient.restore(request);
 
-      genericRequest = prepareCreateTaskResponse(response, genericRequest);
+        genericRequest = prepareCreateTaskResponse(response, genericRequest);
 
-      return genericRequest;
-  }
+        return genericRequest;
+    }
 
     @Override
     public SglGenericRequest createArchiveRequest(SglGenericRequest genericRequest) throws JsonProcessingException {
@@ -72,7 +72,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
         SglPayload sglPayload = SglPayload.builder()
                 .caller(genericRequest.getCorrelationId())
                 .displayName(genericRequest.getResourceId())
-            .priority(genericRequest.getPriority())
+                .priority(genericRequest.getPriority())
                 .files(List.of(sglFilesPayload))
                 .build();
 
@@ -115,30 +115,39 @@ public class SglAdapterServiceImpl implements SglAdapterService {
 
     private SglGenericRequest prepareCreateTaskResponse(String response, SglGenericRequest genericRequest) {
 
-        if (!StringUtils.isBlank(response)) {
-            ObjectMapper jsonMapper = new JsonMapper();
-            JsonNode json = null;
-            try {
-                json = jsonMapper.readTree(response);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-
-            String taskId = json.get("RID").asText();
-            if (Integer.parseInt(taskId) <= 0) {
-                throw new BadRequestException(response);
-            }
-
-            genericRequest.setTaskId(taskId);
-            genericRequest.setStatus(TaskStatus.COMPLETED_SUCCESS);
-            genericRequest.setDetails(response);
-        } else {
-            // empty response
-            throw new ServiceUnavailableException();
+        // throw an exception - empty response
+        if (StringUtils.isBlank(response)) {
+            throw new ServiceUnavailableException("Unable to get a response from the server");
         }
 
-    return genericRequest;
-  }
+        ObjectMapper jsonMapper = new JsonMapper();
+        JsonNode json = null;
+        try {
+            json = jsonMapper.readTree(response);
+        } catch (JsonProcessingException e) {
+            throw new ServiceUnavailableException("Error while parsing response " + e.getMessage());
+        }
+
+        // try to get JobId from the response
+        String taskId = json.get("RID").asText();
+        int jobId;
+        try {
+            jobId = Integer.parseInt(taskId);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException(response);
+        }
+
+        if (jobId <= 0) {
+            throw new BadRequestException(response);
+        }
+
+        genericRequest.setTaskId(taskId);
+        genericRequest.setStatus(TaskStatus.COMPLETED_SUCCESS);
+        genericRequest.setDetails(response);
+
+
+        return genericRequest;
+    }
 
     @Override
     public SglGenericRequest getJobStatus(String taskId) {
@@ -156,7 +165,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
     private SglGenericRequest convertStatusResponse(String response, String taskId) {
 
         if (StringUtils.isBlank(response)) {
-            throw new ServiceUnavailableException();
+            throw new ServiceUnavailableException("Unable to get a response from the server");
         }
 
         SglGenericRequest taskStatusResponse = new SglGenericRequest();
@@ -202,7 +211,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
                 taskStatusResponse.getError().put("detail", response);
             }
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ServiceUnavailableException("Error while parsing response for getStatus " + e.getMessage());
         }
 
         taskStatusResponse.setStatus(taskStatus);
