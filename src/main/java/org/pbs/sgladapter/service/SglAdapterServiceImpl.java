@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.pbs.sgladapter.adapter.SglAdapterClient;
@@ -16,10 +13,10 @@ import org.pbs.sgladapter.exception.BadRequestException;
 import org.pbs.sgladapter.exception.JobNotFoundException;
 import org.pbs.sgladapter.exception.ServiceUnavailableException;
 import org.pbs.sgladapter.model.*;
-import org.pbs.sgladapter.model.sgl.Job;
-import org.pbs.sgladapter.model.sgl.SglFilesPayload;
-import org.pbs.sgladapter.model.sgl.SglPayload;
-import org.pbs.sgladapter.model.sgl.SglStatusResponse;
+import org.pbs.sgladapter.dto.sgl.Job;
+import org.pbs.sgladapter.dto.sgl.SglFilesPayload;
+import org.pbs.sgladapter.dto.sgl.SglPayload;
+import org.pbs.sgladapter.dto.sgl.SglStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -70,7 +67,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
                 .build();
 
         SglPayload sglPayload = SglPayload.builder()
-                .caller(genericRequest.getCorrelationId())
+                .caller(genericRequest.getRequestor())
                 .displayName(genericRequest.getResourceId())
                 .priority(genericRequest.getPriority())
                 .files(List.of(sglFilesPayload))
@@ -95,11 +92,10 @@ public class SglAdapterServiceImpl implements SglAdapterService {
                 .build();
 
         SglPayload sglPayload = SglPayload.builder()
-                .caller(genericRequest.getCorrelationId())
+                .caller(genericRequest.getRequestor())
                 .displayName(genericRequest.getResourceId())
                 .priority(genericRequest.getPriority())
                 .target(genericRequest.getLocatorInfo())
-                .deleteFiles(genericRequest.getDeleteSource())
                 .files(List.of(sglFilesPayload))
                 .build();
 

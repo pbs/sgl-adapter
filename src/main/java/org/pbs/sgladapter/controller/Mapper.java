@@ -13,32 +13,30 @@ public class Mapper {
 
     public SglGenericRequest toGenericRequest(FileRestoreDto fileRestoreDto) {
         return SglGenericRequest.builder()
-                .correlationId(fileRestoreDto.getCorrelationId())
                 .type(fileRestoreDto.getType())
                 .priority(fileRestoreDto.getPriority())
                 .path(fileRestoreDto.getTaskDetails().getPath())
                 .filename(fileRestoreDto.getTaskDetails().getFilename())
                 .resourceId(fileRestoreDto.getTaskDetails().getResourceId())
+                .requestor(fileRestoreDto.getTaskDetails().getRequestor())
                 .build();
     }
 
     public SglGenericRequest toGenericRequest(FileArchiveDto fileArchiveDto) {
         return SglGenericRequest.builder()
-                .correlationId(fileArchiveDto.getCorrelationId())
                 .type(fileArchiveDto.getType())
                 .priority(fileArchiveDto.getPriority())
                 .path(fileArchiveDto.getTaskDetails().getPath())
                 .filename(fileArchiveDto.getTaskDetails().getFilename())
                 .resourceId(fileArchiveDto.getTaskDetails().getResourceId())
                 .locatorInfo(fileArchiveDto.getTaskDetails().getLocatorInfo())
-                .deleteSource(fileArchiveDto.getTaskDetails().getDeleteSource())
+                .requestor(fileArchiveDto.getTaskDetails().getRequestor())
                 .build();
     }
 
     public CreateResponseDto toFileRestoreResponse(SglGenericRequest genericRequest) {
         return CreateResponseDto.builder()
                 .taskId(genericRequest.getTaskId())
-                .correlationId(genericRequest.getCorrelationId())
                 .type(genericRequest.getType())
                 .priority(genericRequest.getPriority())
                 .taskDetails(genericRequest.getTaskDetailsForRestore())
@@ -49,7 +47,6 @@ public class Mapper {
     public CreateResponseDto toFileArchiveResponse(SglGenericRequest genericRequest) {
         return CreateResponseDto.builder()
                 .taskId(genericRequest.getTaskId())
-                .correlationId(genericRequest.getCorrelationId())
                 .type(genericRequest.getType())
                 .priority(genericRequest.getPriority())
                 .taskDetails(genericRequest.getTaskDetailsForArchive())

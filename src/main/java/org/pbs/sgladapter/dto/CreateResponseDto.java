@@ -12,7 +12,6 @@ import java.util.Map;
 @Jacksonized
 public class CreateResponseDto {
     String taskId;
-    String correlationId;
     String type;
     int priority;
     TaskStatus status;

@@ -1,4 +1,4 @@
-package org.pbs.sgladapter.model.sgl;
+package org.pbs.sgladapter.dto.sgl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;

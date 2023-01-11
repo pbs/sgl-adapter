@@ -33,7 +33,7 @@ public class SglGenericRequest {
 
     private String locatorInfo;
 
-    private Boolean deleteSource;
+    private String requestor;
 
     private String details;
 
@@ -51,6 +51,7 @@ public class SglGenericRequest {
     public Map<String, Object> getTaskDetailsForRestore() {
         Map<String, Object> taskDetails = new HashMap();
 
+        taskDetails.put("requestor", this.getRequestor());
         taskDetails.put("path", this.getPath());
         taskDetails.put("filename", this.getFilename());
         taskDetails.put("resourceId", this.getResourceId());
@@ -63,11 +64,11 @@ public class SglGenericRequest {
     public Map<String, Object> getTaskDetailsForArchive() {
         Map<String, Object> taskDetails = new HashMap();
 
+        taskDetails.put("requestor", this.getRequestor());
         taskDetails.put("path", this.getPath());
         taskDetails.put("filename", this.getFilename());
         taskDetails.put("resourceId", this.getResourceId());
         taskDetails.put("locatorInfo", this.getLocatorInfo());
-        taskDetails.put("deleteSource", this.getDeleteSource());
         taskDetails.put("details", this.getDetails());
 
         return taskDetails;

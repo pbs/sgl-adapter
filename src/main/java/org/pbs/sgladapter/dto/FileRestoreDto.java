@@ -14,11 +14,6 @@ import javax.validation.constraints.Pattern;
 @Jacksonized
 public class FileRestoreDto {
 
-    @Pattern(
-            regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$",
-            message = "correlationId must be a valid GUID")
-    private String correlationId;
-
     @Pattern(regexp = "file_restore", message = "type must be file_restore")
     private String type;
 

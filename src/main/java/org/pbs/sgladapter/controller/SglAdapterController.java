@@ -7,25 +7,19 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Valid;
-
+import org.pbs.sgladapter.dto.CreateResponseDto;
 import org.pbs.sgladapter.dto.FileArchiveDto;
 import org.pbs.sgladapter.dto.FileRestoreDto;
-import org.pbs.sgladapter.dto.CreateResponseDto;
 import org.pbs.sgladapter.dto.StatusResponseDto;
 import org.pbs.sgladapter.model.SglGenericRequest;
-import org.pbs.sgladapter.model.TaskStatusResponse;
 import org.pbs.sgladapter.service.SglAdapterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/sgl")
@@ -53,7 +47,7 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "400",
                   description = "${api.response-codes.badRequest.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
-          @ApiResponse(responseCode = "500",
+          @ApiResponse(responseCode = "503",
                   description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createRestoreTask(@Valid @RequestBody FileRestoreDto fileRestoreDto)
@@ -79,7 +73,7 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "400",
                   description = "${api.response-codes.badRequest.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
-          @ApiResponse(responseCode = "500",
+          @ApiResponse(responseCode = "503",
                   description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<CreateResponseDto> createArchiveTask(@Valid @RequestBody FileArchiveDto fileArchiveDto)
@@ -104,7 +98,7 @@ public class SglAdapterController {
           @ApiResponse(responseCode = "404",
                   description = "${api.response-codes.notFound.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})}),
-          @ApiResponse(responseCode = "500",
+          @ApiResponse(responseCode = "503",
                   description = "${api.response-codes.internalServerError.desc}",
                   content = {@Content(examples = {@ExampleObject(value = "")})})})
   public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String jobId) {

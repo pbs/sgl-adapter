@@ -42,26 +42,49 @@ public class TaskControllerAdvice {
     return errors;
   }
 
+
+  /**
+   * Handles a BadRequestException, which is thrown if the vendor system was unable to create a
+   * restore/archive job for a reason. It ensures the exception is treated as
+   * a 400 - Bad Request.
+   *
+   * @param ex exception thrown when validation rules fail
+   * @return response with failed validation and status 400
+   */
   @ExceptionHandler(BadRequestException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public final ResponseEntity<Object> badRequestHandler(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> handleBadRequestExceptions(Exception ex, WebRequest request) {
     ErrorResponse exceptionResponse =
             new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
   }
 
 
+  /**
+   * Handles a ServiceUnavailableException, which is thrown if the vendor system was unable to return a
+   * valid JSON response. It ensures the exception is treated as a 503 - Server Unavailable.
+   *
+   * @param ex exception thrown when validation rules fail
+   * @return response with failed message and status 503
+   */
   @ExceptionHandler(ServiceUnavailableException.class)
   @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-  public final ResponseEntity<Object> serviceUnavailableHandler(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> handleServiceUnavailableExceptions(Exception ex, WebRequest request) {
     ErrorResponse exceptionResponse =
             new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
   }
 
+  /**
+   * Handles a JobNotFoundException, which is thrown if the vendor system was unable to find the job
+   * with passed in taskId. It ensures the exception is treated as a 404 - Not Found.
+   *
+   * @param ex exception thrown when validation rules fail
+   * @return response with failed message and status 404
+   */
   @ExceptionHandler(JobNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public final ResponseEntity<Object> jobNotFoundHandler(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> handleJobNotFoundExceptions(Exception ex, WebRequest request) {
     ErrorResponse exceptionResponse =
             new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
