@@ -1,6 +1,9 @@
 package org.pbs.sgladapter.controller;
 
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.pbs.sgladapter.exception.BadRequestException;
 import org.pbs.sgladapter.exception.ErrorResponse;
 import org.pbs.sgladapter.exception.JobNotFoundException;
@@ -13,10 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice()
 public class TaskControllerAdvice {
@@ -55,7 +54,7 @@ public class TaskControllerAdvice {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public final ResponseEntity<Object> handleBadRequestExceptions(Exception ex, WebRequest request) {
     ErrorResponse exceptionResponse =
-            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
   }
 
@@ -69,9 +68,10 @@ public class TaskControllerAdvice {
    */
   @ExceptionHandler(ServiceUnavailableException.class)
   @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-  public final ResponseEntity<Object> handleServiceUnavailableExceptions(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> handleServiceUnavailableExceptions(Exception ex,
+                                                                         WebRequest request) {
     ErrorResponse exceptionResponse =
-            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.SERVICE_UNAVAILABLE);
   }
 
@@ -84,9 +84,10 @@ public class TaskControllerAdvice {
    */
   @ExceptionHandler(JobNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public final ResponseEntity<Object> handleJobNotFoundExceptions(Exception ex, WebRequest request) {
+  public final ResponseEntity<Object> handleJobNotFoundExceptions(Exception ex,
+                                                                  WebRequest request) {
     ErrorResponse exceptionResponse =
-            new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
   }
 }

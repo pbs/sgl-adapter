@@ -1,10 +1,9 @@
 package org.pbs.sgladapter.dto;
 
+import javax.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
-
-import javax.validation.constraints.NotBlank;
 
 @Value
 @Builder
