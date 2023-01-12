@@ -95,6 +95,7 @@ public class SglAdapterServiceImpl implements SglAdapterService {
         .displayName(genericRequest.getResourceId())
         .priority(genericRequest.getPriority())
         .target(genericRequest.getLocatorInfo())
+        .deleteFiles(Boolean.parseBoolean(genericRequest.getDeleteSource()))
         .files(List.of(sglFilesPayload))
         .build();
 
