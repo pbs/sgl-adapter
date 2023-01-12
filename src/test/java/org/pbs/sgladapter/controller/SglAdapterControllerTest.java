@@ -42,7 +42,6 @@ class SglAdapterControllerTest {
     task.setType(FILE_RESTORE.getType());
 
     CreateResponseDto createResponseDto = CreateResponseDto.builder()
-            .correlationId("abc-123-abc")
             .taskId("123")
             .type(FILE_RESTORE.getType())
             .taskDetails(Map.of("path", "\\file\\restore\\path","resourceId", "abc1234", "filename", "abc1234.mxf"))
@@ -51,7 +50,6 @@ class SglAdapterControllerTest {
     when(mapper.toFileRestoreResponse(any())).thenReturn(createResponseDto);
     ResponseEntity<CreateResponseDto> responseEntity = sglAdapterController.createRestoreTask(any(FileRestoreDto.class));
     assertEquals("123", ((CreateResponseDto) responseEntity.getBody()).getTaskId());
-    assertEquals("abc-123-abc", ((CreateResponseDto) responseEntity.getBody()).getCorrelationId());
     assertEquals(FILE_RESTORE.getType(), ((CreateResponseDto) responseEntity.getBody()).getType());
     assertEquals("\\file\\restore\\path", ((CreateResponseDto) responseEntity.getBody()).getTaskDetails().get("path"));
     assertEquals("abc1234", ((CreateResponseDto) responseEntity.getBody()).getTaskDetails().get("resourceId"));
@@ -66,7 +64,6 @@ class SglAdapterControllerTest {
     task.setType(FILE_ARCHIVE.getType());
 
     CreateResponseDto createResponseDto = CreateResponseDto.builder()
-            .correlationId("abc-123-abc")
             .taskId("123")
             .type(FILE_ARCHIVE.getType())
             .taskDetails(Map.of("path", "\\file\\restore\\path","resourceId", "abc1234", "filename", "abc1234.mxf", "locatorInfo", "aaa111"))
@@ -75,7 +72,6 @@ class SglAdapterControllerTest {
     when(mapper.toFileArchiveResponse(any())).thenReturn(createResponseDto);
     ResponseEntity<CreateResponseDto> responseEntity = sglAdapterController.createArchiveTask(any(FileArchiveDto.class));
     assertEquals("123", ((CreateResponseDto) responseEntity.getBody()).getTaskId());
-    assertEquals("abc-123-abc", ((CreateResponseDto) responseEntity.getBody()).getCorrelationId());
     assertEquals(FILE_ARCHIVE.getType(), ((CreateResponseDto) responseEntity.getBody()).getType());
     assertEquals("\\file\\restore\\path", ((CreateResponseDto) responseEntity.getBody()).getTaskDetails().get("path"));
     assertEquals("abc1234", ((CreateResponseDto) responseEntity.getBody()).getTaskDetails().get("resourceId"));
