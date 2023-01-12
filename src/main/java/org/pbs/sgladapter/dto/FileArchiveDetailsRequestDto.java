@@ -28,6 +28,8 @@ public class FileArchiveDetailsRequestDto {
   @NotBlank(message = "locatorInfo must not be empty")
   private String locatorInfo;
 
-  private Boolean deleteSource;
+  @NotBlank(message = "deleteSource must not be empty")
+  @Pattern(regexp = "^(\\\")?(?i)(\\s)*(true|false)(\\s)*(\\\")?$", message = "deleteSource must be true/false")
+  private String deleteSource;
 
 }

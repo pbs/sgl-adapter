@@ -34,7 +34,7 @@ public class SglGenericRequest {
 
   private String requestor;
 
-  private Boolean deleteSource;
+  private String deleteSource;
 
   private String details;
 
@@ -91,8 +91,5 @@ public class SglGenericRequest {
     return fullFileName;
   }
 
-//    public String getFormattedTimestamp() {
-//        private static final String PATTERN_FORMAT = "MM/dd/yyyyT";
-//    }
 
 }
