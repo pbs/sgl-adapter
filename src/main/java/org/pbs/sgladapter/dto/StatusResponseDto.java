@@ -1,6 +1,7 @@
 package org.pbs.sgladapter.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import org.pbs.sgladapter.model.TaskStatus;

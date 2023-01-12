@@ -107,11 +107,14 @@ public class SglAdapterController {
       @ApiResponse(responseCode = "503",
           description = "${api.response-codes.internal-server-error.desc}",
           content = {@Content(examples = {@ExampleObject(value = "")})})})
-  public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(@PathVariable String jobId) {
+  public ResponseEntity<StatusResponseDto> getJobStatusForTaskId(
+          @PathVariable String jobId,
+          @RequestHeader(value = "X-Correlation-ID", required = true) String correlationId) {
+    logger.info("X-Correlation-ID : {}", correlationId);
     logger.info("Getting job status for taskId:" + " - " + jobId);
     SglGenericRequest taskStatusResponse = sglAdapterService.getJobStatus(jobId);
     logger.info("Got taskStatusResponse:" + taskStatusResponse);
-    StatusResponseDto response = mapper.toStatusResponseDto(taskStatusResponse);
+    StatusResponseDto response = mapper.toStatusResponseDto(taskStatusResponse, correlationId);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 

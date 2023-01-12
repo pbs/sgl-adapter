@@ -56,9 +56,9 @@ public class Mapper {
   }
 
 
-  public StatusResponseDto toStatusResponseDto(SglGenericRequest genericRequest) {
+  public StatusResponseDto toStatusResponseDto(SglGenericRequest genericRequest, String correlationId) {
     return StatusResponseDto.builder()
-        .requestorCorrelationId(genericRequest.getCorrelationId())
+            .requestorCorrelationId(correlationId)
         .status(genericRequest.getStatus())
         .resourceId(genericRequest.getResourceId())
         .timestamp(genericRequest.getTimestamp().toString())

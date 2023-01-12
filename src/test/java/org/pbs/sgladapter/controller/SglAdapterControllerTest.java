@@ -89,9 +89,9 @@ class SglAdapterControllerTest {
             new SglGenericRequest();
     sampleTaskStatusResponse.setStatus(TaskStatus.COMPLETED_SUCCESS);
     when(sglAdapterService.getJobStatus(any())).thenReturn(sampleTaskStatusResponse);
-    when(mapper.toStatusResponseDto(any(SglGenericRequest.class))).thenReturn(statusResponseDto);
+    when(mapper.toStatusResponseDto(any(SglGenericRequest.class), any(String.class))).thenReturn(statusResponseDto);
     ResponseEntity<StatusResponseDto> responseEntity =
-            sglAdapterController.getJobStatusForTaskId(any());
+            sglAdapterController.getJobStatusForTaskId(any(), any());
     assertEquals(TaskStatus.COMPLETED_SUCCESS,
             ((StatusResponseDto) responseEntity.getBody()).getStatus());
     assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
