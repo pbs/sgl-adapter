@@ -61,14 +61,9 @@ public class SglAdapterServiceImplTest {
                     }
                     """);
 
-    try {
-      inputTask = sglAdapterServiceImpl.createRestoreRequest(inputTask);
+    inputTask = sglAdapterServiceImpl.createRestoreRequest(inputTask);
 
-      assertEquals(inputTask.getTaskId(), "1336");
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    assertEquals(inputTask.getTaskId(), "1336");
 
   }
 
@@ -93,14 +88,9 @@ public class SglAdapterServiceImplTest {
           }
           """);
 
-    try {
-      inputTask = sglAdapterServiceImpl.createArchiveRequest(inputTask);
+    inputTask = sglAdapterServiceImpl.createArchiveRequest(inputTask);
 
-      assertEquals(inputTask.getTaskId(), "1417");
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    assertEquals(inputTask.getTaskId(), "1417");
 
   }
 
